@@ -2,7 +2,7 @@ const { MessageEmbed, Permissions } = require('discord.js');
 const commandeFormat = 'lock';
 const ALIAS = ['verouiller', 'vérouiller'];
 const fs = require('fs');
-const lock_chann = require('../dblock.json');
+const lock_chann = require('../dbs/dblock.json');
 
 
 module.exports.check = (args) => {

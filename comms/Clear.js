@@ -1,7 +1,8 @@
 const { Permissions, MessageEmbed, MessageCollector } = require('discord.js');
 const commandeFormat = 'clear';
 const ALIAS = ['delete', 'effecer', 'éffacer', 'éfface', 'efface', 'supprime'];
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
+const embeds = require('../functions-handler/embeds');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
@@ -71,16 +72,15 @@ module.exports.action = async (msg, args) => {
 						await waiting(1000);
 						msgg.channel.bulkDelete(number2, true).catch();
 						await collector.stop();
+						embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
+
 					}
 				}
 				else {
 
 					await msgg.channel.bulkDelete(number, true).catch();
+					const rep = await embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
 					await collector.stop();
-					const rep_emb = await new MessageEmbed()
-						.setTitle(`\`${number - 3}\` messages ont étés supprimés !`)
-						.setColor(colorC);
-					const rep = await msgg.channel.send({ embeds: [rep_emb] });
 					setTimeout(() => {
 						rep.delete();
 					}, 5000);

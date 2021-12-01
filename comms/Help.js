@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageSelectMenu, MessageActionRow } = require('discord.js');
 const commandeFormat = 'help';
 const ALIAS = ['aide'];
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));

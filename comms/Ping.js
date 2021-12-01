@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const commandeFormat = 'ping';
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return commandeFormat.split(' ')[0] == args[0];

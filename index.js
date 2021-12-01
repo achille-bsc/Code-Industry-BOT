@@ -5,23 +5,22 @@
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
-const COLOR = require('./color-embeds.json');
+const COLOR = require('./dbs/color-embeds.json');
 
 require('dotenv').config();
 
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(process.env.BOT);
+client.login(process.env.TEST);
 
 // -----Import DBs Configs-----
-const PREFIXFILE = require('./prefix.json');
+const PREFIXFILE = require('./dbs/prefix.json');
 
 
 // -----Imports WebHooks-----
 
 
 // -----Imports Fichers de Commandes-----
-const CLOSE = require('./comms/Close');
 const COLOREMBED = require('./comms/Config-embed');
 // const CONFIG = require('./comms/config.js')
 const HELP = require('./comms/Help');
@@ -30,7 +29,6 @@ const INVITE = require('./comms/Invite');
 const JOKE = require('./comms/Jokes');
 const KICK = require('./comms/kick');
 const LOCK = require('./comms/Lock');
-const TICKET = require('./comms/Ticket');
 const POLL = require('./comms/Poll');
 const PING = require('./comms/Ping');
 const PREFIX = require('./comms/Config-prefix');
@@ -42,7 +40,6 @@ const CLEAR = require('./comms/Clear');
 const AVATAR = require('./comms/avatar');
 const BAN = require('./comms/ban.js');
 const METEO = require('./comms/meteo');
-const PLAY = require('./comms/play');
 const STAFF = require('./comms/staff');
 const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
@@ -114,13 +111,6 @@ client.on('messageCreate', async msg => {
 		// Commands avec prefix
 		if (msg.content.startsWith(PREFIXFILE.prefix[msg.guild.id]?.prefix || '-')) {
 			args[0] = args[0].substring(PREFIXFILE.prefix[msg.guild.id]?.prefix.length || 1);
-
-			if (TICKET.check(args)) {return TICKET.action(msg, args);}
-
-			if (CLOSE.check(args)) {
-				return CLOSE.action(msg, args,
-				);
-			}
 
 			if (LOCK.check(args)) {
 				return LOCK.action(msg, args,
@@ -213,11 +203,6 @@ client.on('messageCreate', async msg => {
 
 			if (METEO.check(args)) {
 				return METEO.action(msg, args, client,
-				);
-			}
-
-			if (PLAY.check(args)) {
-				return PLAY.action(msg, args, client,
 				);
 			}
 

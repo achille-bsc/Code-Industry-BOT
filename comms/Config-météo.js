@@ -1,9 +1,9 @@
 const { Permissions, MessageEmbed, MessageCollector } = require('discord.js');
 const commandeFormat = 'meteo-config';
 const ALIAS = ['config-meteo', 'météo-config', 'config-météo'];
-const city_db = require('../db_meteo.json');
+const city_db = require('../dbs/meteo.json');
 const fs = require('fs');
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));

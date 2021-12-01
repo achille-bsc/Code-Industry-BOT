@@ -20,7 +20,7 @@ module.exports.action = async (msg, args) => {
 		const COLOR = require('../color-embeds.json');
 		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		if (!args[1]) {
-			const db_meteo = require('../db_meteo.json');
+			const db_meteo = require('../dbs/meteo.json');
 			const city = db_meteo['meteo'][msg.guild.id]?.['city'] || 'Paris';
 			weather.find({ search: city, degreeType: 'C' }, function(err, result) {
 				try {

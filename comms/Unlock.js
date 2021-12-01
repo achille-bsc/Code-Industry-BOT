@@ -1,7 +1,7 @@
 const { Permissions, MessageEmbed } = require('discord.js');
 const commandeFormat = 'unlock';
 const ALIAS = [];
-const Lock = require('../dblock.json');
+const Lock = require('../dbs/dblock.json');
 const fs = require('fs');
 
 module.exports.check = (args) => {

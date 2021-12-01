@@ -1,6 +1,7 @@
 const { MessageEmbed, Permissions } = require('discord.js');
 const commandeFormat = 'kick [membre]';
 const ALIAS = [];
+const embeds = require('../functions-handler/embeds')
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
@@ -14,18 +15,7 @@ module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
 		msg.delete();
-		const nperm = new MessageEmbed()
-			.setTitle('Erreur')
-			.setColor('RED')
-			.setDescription('Vous n\'avez pas la permission d\'utiliser cette commande.');
-		const nmention = new MessageEmbed()
-			.setTitle('Erreur')
-			.setColor('RED')
-			.setDescription('Vous n\'avez pas mentionné(e) de membres.');
-		const own = new MessageEmbed()
-			.setTitle('Erreur')
-			.setColor('RED')
-			.setDescription('Vous ne pouvez pas exclure le propriétaire du serveur.');
+		
 		/* const botperm = new MessageEmbed()
 			.setTitle('Erreur')
 			.setColor('RED')
@@ -33,7 +23,7 @@ module.exports.action = async (msg, args) => {
 		if (!msg.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS)) return msg.channel.send({ embeds: [nperm] });
 		const member = msg.mentions.members.first();
 
-		if (!member) return msg.channel.send({ embeds: [nmention] });
+		if (!member) return embeds.erreur(msg, `Veuillez spécifier un membre à \`kick\`.`)
 
 		if (member.id === msg.guild.ownerID) return msg.channel.send({ embeds: [own] });
 		/* if(msg.member.roles.cahce.get(highest).comparePositionTo(member.roles.cache.get(highest)) < 1 && msg.author.id !== msg.guild.ownerID) return msg.channel.send(

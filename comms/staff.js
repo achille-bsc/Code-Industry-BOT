@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageCollector, WebhookClient, Permissions, Invite, InviteGuild } = require('discord.js');
 const commandeFormat = 'staff';
 const ALIAS = [];
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));

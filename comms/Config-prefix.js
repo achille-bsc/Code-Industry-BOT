@@ -1,9 +1,9 @@
 const { Permissions, MessageEmbed, MessageCollector } = require('discord.js');
 const commandeFormat = 'prefix';
 const ALIAS = [];
-const color_db = require('../prefix.json');
+const color_db = require('../dbs/prefix.json');
 const fs = require('fs');
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));

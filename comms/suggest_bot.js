@@ -1,7 +1,7 @@
 const { MessageEmbed, WebhookClient, MessageCollector } = require('discord.js');
 const commandeFormat = 'suggestion-bot';
 const ALIAS = ['suggest-bot'];
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/858361544538325023/TiTQ0kDDp0fnU060nu98_OkI4P7Senu6mJAxFF1C-4x_-PsM-p6iZ5Y4n0-NKhrjh93a' });
 
 module.exports.check = (args) => {

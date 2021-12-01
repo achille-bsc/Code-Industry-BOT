@@ -1,7 +1,7 @@
 const { MessageEmbed, MessageCollector } = require('discord.js');
 const commandeFormat = 'avatar';
 const ALIAS = [];
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
@@ -93,7 +93,6 @@ module.exports.action = async (msg, args) => {
 							{ name: 'Date de création du compte', value: `${member_collected.user.createdAt}`, inline: true },
 							{ name: 'ID', value: `${member_collected.user.id}` });
 					msg.channel.send({ embeds: [avatar] });
-					await send_question.delete();
 				}
 			});
 		}

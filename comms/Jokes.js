@@ -4,7 +4,7 @@ const ALIAS = ['jokes', 'blague', 'blagues'];
 require('dotenv').config();
 // blagues API
 const BlaguesAPI = require('blagues-api');
-const COLOR = require('../color-embeds.json');
+const COLOR = require('../dbs/color-embeds.json');
 const blagues = new BlaguesAPI(process.env.APIJOKE);
 
 module.exports.check = (args) => {
