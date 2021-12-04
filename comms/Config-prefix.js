@@ -89,7 +89,7 @@ module.exports.action = async (msg, args) => {
 						prefix,
 					};
 				}
-				fs.writeFileSync('./prefix.json', JSON.stringify(color_db));
+				fs.writeFileSync('./dbs/prefix.json', JSON.stringify(color_db));
 				msgg.delete();
 				const accept_send = await msgg.channel.send({ embeds: [configured] });
 				setTimeout(() => {

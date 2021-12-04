@@ -11,7 +11,7 @@ require('dotenv').config();
 
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(process.env.BOT);
+client.login(process.env.TEST);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -43,6 +43,8 @@ const METEO = require('./comms/meteo');
 const STAFF = require('./comms/staff');
 const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
+const CONFIGWELLCOME = require('./comms/Config-Welcome');
+
 // const CONFIGMETEO = require('./comms/Config-météo');
 
 client.discordTogether;
@@ -220,14 +222,16 @@ client.on('messageCreate', async msg => {
 				return CONFIGMETEO.action(msg, args, client,
 				);
 			}
+			if (CONFIGSTAFF.check(args)) {
+				return CONFIGSTAFF.action(msg, args, client,
+				);
+			}
 		}
 	}
 	else if (args[0].startsWith('-')) {
 		args[0] = args[0].substring(1);
 	}
 });
-
-
 
 // ----- Commande HELP -----
 
@@ -373,6 +377,8 @@ client.on('interactionCreate', async interaction => {
 // Say Hello !
 
 client.on('guildMemberAdd', async (member) => {
+	const wlc_db = require('./dbs/wellcome.json');
+	const etat = wlc_db[member.guild.id]?.etat;
 	const colorC = COLOR['color-embed'][member.guild.id]?.color || '#4ed5f8';
 	const guild = member.guild;
 	const member_count = guild.memberCount;
@@ -382,7 +388,11 @@ client.on('guildMemberAdd', async (member) => {
 		.setFooter('Avec les nouveaux membres, nous avons fait de nouvelles amitiés !')
 		.setColor(colorC)
 	;
+	if(etat == 'on') {
 	await member.guild.channels.cache.find(channel => channel.name === 'général').send(members_embed);
+	} else {
+		return;
+	}
 });
 
 client.on('guildMemberRemove', async (member) => {

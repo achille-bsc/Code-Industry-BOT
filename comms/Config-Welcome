@@ -1,0 +1,129 @@
+const { Permissions, MessageEmbed, MessageCollector, MessageButton, InteractionCollector } = require('discord.js');
+const commandeFormat = 'config-welcome';
+const ALIAS = ['config-wlc', 'config-hello', 'config-wcm'];
+const wlc_db = require('../dbs/wellcome.json');
+const fs = require('fs');
+const COLOR = require('../dbs/color-embeds.json');
+const embeds = require('../functions/embeds');
+const { embed } = require('../functions-handler/embeds');
+let etat = ''
+module.exports.check = (args) => {
+	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
+};
+
+/**
+     *
+     * @param {Discord.Message} msg
+     */
+
+module.exports.action = async (msg, args) => {
+	if (commandeFormat.split(' ').length <= args.length) {
+		const AUTHORID = msg.author.id;
+		// executer le code
+		
+		if (!msg.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+			return embeds.error(msg, `Vous n'avez pas la permissionsd'utiliser cette commande !`)
+		}
+
+		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
+        // interaction Collector for buttons
+
+        const question = new MessageEmbed()
+            .setColor(colorC)
+            .setTitle('Voullez-vous activer ou désactiver le message de bienvenue ?')
+            .setDescription('**Activer** : ✅\n**Désactiver** : ❌')
+        ;
+
+        const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('activate')
+					.setLabel('✅ Activer')
+					.setStyle('SUCCESS'),
+		    )
+            .addComponents(
+				new MessageButton()
+					.setCustomId('desactivate')
+					.setLabel('❌ Désativer')
+					.setStyle('DANGER'),
+		    )
+        ;
+        const send_question = await msg.channel.send( { embeds: [question], components: [row] })
+			.catch(console.error())
+        ;
+
+
+
+			// utilisation du collector !
+        const collector = new InteractionCollector(msg, m => m.author.id === AUTHORID, { time: 60000 });
+
+        collector.on('collect', async (m) => {
+			let etat = ''
+
+            if (m.customId === 'activate') {
+                etat = 'on';
+                send_question.delete();
+                const embed_on = new MessageEmbed()
+                    .setColor(colorC)
+                    .setTitle('Vous avez activé le message de bienvenue !')
+                    .setFooter('Vous pouvez désactiver le message de bienvenue avec la commande `config-welcome`')
+                ;
+                const validation = await msg.channel.send({ embed: embed_on })
+                setTimeout(() => {
+                    validation.delete();
+                } , 2000);
+            } else if (m.customId === 'desactivate') {
+                etat = 'off';
+                send_question.delete();
+                const embed_off = new MessageEmbed()
+                    .setColor(colorC)
+                    .setTitle('Vous avez désactivé le message de bienvenue !')
+                    .setFooter('Vous pouvez activer le message de bienvenue avec la commande `config-welcome`')
+                ;
+                const validation = await msg.channel.send({ embed: embed_off })
+                setTimeout(() => {
+                    validation.delete();
+                } , 2000);
+            } else if (m.customId === 'cancel') {
+                send_question.delete();
+                const embed_cancel = new MessageEmbed()
+                    .setColor(colorC)
+                    .setTitle('Commande annulée !')
+                    .setFooter('Vous pouvez activer ou désactiver le message de bienvenue avec la commande `config-welcome`')
+                ;
+                const validation = await msg.channel.send({ embed: embed_cancel })
+                setTimeout(() => {
+                    validation.delete();
+                } , 2000);
+                return collector.stop('cancel');
+            }
+			
+            if (wlc_db['prefix'][msgg.guild.id]) {
+                delete (wlc_db['prefix'][msgg.guild.id]);
+
+                wlc_db['prefix'][msgg.guild.id] = {};
+                wlc_db['prefix'][msgg.guild.id] = {
+                    etat,
+                };
+            }
+            else {
+                wlc_db['prefix'][msgg.guild.id] = {};
+                wlc_db['prefix'][msgg.guild.id] = {
+                    etat,
+                };
+            }
+            fs.writeFileSync('./dbs/wellcome.json', JSON.stringify(wlc_db));
+            msgg.delete();
+            const accept_send = await msgg.channel.send({ embeds: [configured] });
+            setTimeout(() => {
+                accept_send.delete();
+            }, 5000);
+            collector.stop();
+        });
+	}
+
+	else {
+		msg.reply ('Mauvaise commande, voila ce que j\'attend **' + commandeFormat + '**')
+			.catch(console.error());
+	}
+};

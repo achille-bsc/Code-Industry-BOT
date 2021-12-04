@@ -1,0 +1,107 @@
+const { Permissions, MessageEmbed, MessageCollector } = require('discord.js');
+const commandeFormat = 'config-welcome';
+const ALIAS = ['config-wlc', 'config-hello', 'config-wcm'];
+const gb_db = require('../dbs/goodbye.json');
+const fs = require('fs');
+const COLOR = require('../dbs/color-embeds.json');
+const embeds = require('../functions-handler/embeds');
+let etat = ''
+module.exports.check = (args) => {
+	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
+};
+
+/**
+     *
+     * @param {Discord.Message} msg
+     */
+
+module.exports.action = async (msg, args) => {
+	if (commandeFormat.split(' ').length <= args.length) {
+		const AUTHORID = msg.author.id;
+		// executer le code
+		
+		if (!msg.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
+			return embeds.erreur(msg, `Vous n'avez pas la permissionsd'utiliser cette commande !`)
+		}
+
+		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
+
+
+        const send_question = await embeds.question(msg, `Veuillez donner l'id du salon dans le quelle vous voullez recevoir les messages des membres quittant le serveur`, `> \`cancel\`: Pour annuler la commande
+        > \`on\`: Pour activer le message de d'au revoir
+        > \`off\`: Pour désactiver le message d'au revoir`)
+			.catch(console.error());
+			// utilisation du collector !
+		const collector = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
+		collector.on('collect', async msgg => {
+			if (msgg.author.id !== AUTHORID) {
+				return;
+			}
+			await send_question.delete();
+			await msg.delete();
+			const cont = msgg.content;
+			if (cont === 'cancel') {
+				const annule = new MessageEmbed()
+					.setTitle('Commande annulée !')
+					.setColor('YELLOW');
+				msgg.delete();
+				const anul_send = await msgg.channel.send({ embeds:[annule] });
+				setTimeout(() => {
+					anul_send.delete();
+				}, 5000);
+				collector.stop();
+			}
+            if(cont === 'on'){
+                const on = new MessageEmbed()
+                .setTitle('Système activée !')
+                .setColor('GREEN');
+                msgg.delete();
+                const on_send = await msgg.channel.send({ embeds:[on] });
+                setTimeout(() => {
+                    on_send.delete();
+                }, 5000);
+                collector.stop();
+                let etat = 'on'
+            }
+            if(cont === 'off'){
+                const off = new MessageEmbed()
+                .setTitle('Système désactivée !')
+                .setColor('RED');
+                msgg.delete();
+                const off_send = await msgg.channel.send({ embeds:[off] });
+                setTimeout(() => {
+                    off_send.delete();
+                }, 5000);
+                collector.stop();
+                let etat = 'off'
+            }
+			
+            if (wlc_db['prefix'][msgg.guild.id]) {
+                delete (wlc_db['prefix'][msgg.guild.id]);
+
+                wlc_db['prefix'][msgg.guild.id] = {};
+                wlc_db['prefix'][msgg.guild.id] = {
+                    etat,
+                };
+            }
+            else {
+                wlc_db['prefix'][msgg.guild.id] = {};
+                wlc_db['prefix'][msgg.guild.id] = {
+                    etat,
+                };
+            }
+            fs.writeFileSync('./dbs/wellcome.json', JSON.stringify(wlc_db));
+            msgg.delete();
+            const accept_send = await msgg.channel.send({ embeds: [configured] });
+            setTimeout(() => {
+                accept_send.delete();
+            }, 5000);
+            collector.stop();
+        });
+	}
+
+	else {
+		msg.reply ('Mauvaise commande, voila ce que j\'attend **' + commandeFormat + '**')
+			.catch(console.error());
+	}
+};
