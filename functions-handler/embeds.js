@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 //export a function to be used in other files
 
   
-  function embed(title, description, color, field) {
+  function embed(title, description, color, field='') {
     return new MessageEmbed()
         .setTitle(title)
         .setDescription(description + '\n\n' + field)
@@ -15,11 +15,14 @@ const { MessageEmbed } = require("discord.js");
   };
   
   function success(message, success) {
-    return message.channel.send( { embeds: [this.embed("Succès ! 🎉", success, "GREEN", 'test')] });
+    return message.channel.send( { embeds: [this.embed("Succès ! 🎉", success, "GREEN")] });
   };
   function info(message, info) {
-    return message.channel.send( { embeds: [this.embed("Information", info, "BLUE", 'test')] });
+    return message.channel.send( { embeds: [this.embed("Information", info, "BLUE")] });
+  };
+  function question (message, question, description) {
+    return message.channel.send( { embeds: [this.embed(question, description, "YELLOW")] });
   };
 
 
-module.exports = {embed, erreur, success, info}
+module.exports = {embed, erreur, success, info, question}

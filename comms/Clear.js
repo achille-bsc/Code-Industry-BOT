@@ -17,19 +17,11 @@ module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
 		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
-		const nperm = new MessageEmbed()
-			.setTitle('Erreur !')
-			.setColor('RED')
-			.setDescription('Vous n\'avez pas la permission d\'utiliser cette commande.')
-        ;
+		
 		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
-			return msg.channel.send({ embeds: [nperm] });
+			return msg.channel.send({ embeds: [embeds.erreur(msg, `Vous n'avez pas la permission d'utiliser cette commande !`)] });
 		}
-
-		const question = new MessageEmbed()
-			.setTitle('Combien de messages souhaitez-vous supprimer ?')
-			.setColor('GREEN');
-		await msg.reply({ embeds: [question] })
+		await embeds.question(msg, 'Combien de messages souhaitez-vous supprimer ?', 'Vous devez donner un nombre compris entre `1` et `195` !	')
 			.catch(console.error());
 		// utilisation du collector !
 		const collector = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 30000 });
@@ -53,7 +45,7 @@ module.exports.action = async (msg, args) => {
 				msgg.channel.send({ embeds: [not_exact] })
 					.catch(msgg.channel.send(new MessageEmbed() .setTitle('Vous devez mettre un nombre') .setDescription('Vous ne venez pas de citer un nombre. Vous devez citer un nombre compris entre 1 et 198')),
 					);
-			}
+			}	
 			else {
 				const number = parseInt(msgg.content) + 3;
 				if (number > 99) {

@@ -17,7 +17,7 @@ module.exports.check = (args) => {
 module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
-		const COLOR = require('../color-embeds.json');
+		const COLOR = require('../dbs/color-embeds.json');
 		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		if (!args[1]) {
 			const db_meteo = require('../dbs/meteo.json');

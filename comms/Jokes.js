@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageCollector } = require('discord.js');
-const commandeFormat = 'joke';
+const commandeFormat = 'jokeexample';
 const ALIAS = ['jokes', 'blague', 'blagues'];
 require('dotenv').config();
 // blagues API
