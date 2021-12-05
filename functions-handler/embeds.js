@@ -13,6 +13,10 @@ const { MessageEmbed } = require("discord.js");
   function erreur(message, error) {
     return message.channel.send( { embeds: [this.embed("❌ Une erreur est survenue ! ❌", error, "#DB0501", `__Si votre erreur persiste, vous pouvez contacter le [staff](https://discord.gg/tCmb8yGZYw) sur le serveur [support](https://discord.gg/tCmb8yGZYw)__`)] } );
   };
+
+  function cancel(message) {
+    return message.channel.send( { embeds: [this.embed("Commande annulée", error, "YELLOW", `La commande viens d'être annulée !`)] } );
+  };
   
   function success(message, success) {
     return message.channel.send( { embeds: [this.embed("Succès ! 🎉", success, "GREEN")] });
@@ -25,4 +29,4 @@ const { MessageEmbed } = require("discord.js");
   };
 
 
-module.exports = {embed, erreur, success, info, question}
+module.exports = {embed, erreur, success, info, question, cancel}

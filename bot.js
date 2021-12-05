@@ -1,6 +1,5 @@
 // -----commande console----- npx eslint --ext .js --ignore-path .gitignore .-----
 
-
 // -----Paramétrage API Discord.js
 const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
 const { Client, Intents } = require('discord.js');
@@ -11,7 +10,7 @@ require('dotenv').config();
 
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(process.env.TEST);
+client.login(process.env.BOT);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -44,6 +43,8 @@ const STAFF = require('./comms/staff');
 const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
 const CONFIGWELLCOME = require('./comms/Config-Welcome');
+const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
+const ADMINTICKET = require('./comms/Config-Ticket');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -222,8 +223,16 @@ client.on('messageCreate', async msg => {
 				return CONFIGMETEO.action(msg, args, client,
 				);
 			}
-			if (CONFIGSTAFF.check(args)) {
-				return CONFIGSTAFF.action(msg, args, client,
+			if (CONFIGWELLCOME.check(args)) {
+				return CONFIGWELLCOME.action(msg, args, client,
+				);
+			}
+			if (CONFIGGOODBYE.check(args)) {
+				return CONFIGGOODBYE.action(msg, args, client,
+				);
+			}
+			if (ADMINTICKET.check(args)) {
+				return ADMINTICKET.action(msg, args, client,
 				);
 			}
 		}
@@ -405,7 +414,11 @@ client.on('guildMemberRemove', async (member) => {
 		.setFooter('Avec les nouveaux membres, nous avons fait de nouvelles amitiés !')
 		.setColor(colorC)
 	;
+	if(etat == 'on') {
 	await member.guild.channels.cache.find(channel => channel.name === 'general').send(members_embed);
+	} else {
+		return;
+	}
 });
 
 // Logging

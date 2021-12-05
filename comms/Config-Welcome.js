@@ -1,11 +1,10 @@
-const { Permissions, MessageEmbed, MessageCollector, MessageButton, InteractionCollector } = require('discord.js');
-const commandeFormat = 'config-welcome';
+const { Permissions, MessageEmbed, MessageCollector, MessageButton, InteractionCollector, MessageActionRow, } = require('discord.js');
+const commandeFormat = 'config-wellcome';
 const ALIAS = ['config-wlc', 'config-hello', 'config-wcm'];
 const wlc_db = require('../dbs/wellcome.json');
 const fs = require('fs');
 const COLOR = require('../dbs/color-embeds.json');
-const embeds = require('../functions/embeds');
-const { embed } = require('../functions-handler/embeds');
+const embeds = require('../functions-handler/embeds');
 let etat = ''
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
@@ -16,7 +15,7 @@ module.exports.check = (args) => {
      * @param {Discord.Message} msg
      */
 
-module.exports.action = async (msg, args) => {
+module.exports.action = async (msg, args, client) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		const AUTHORID = msg.author.id;
 		// executer le code
@@ -47,6 +46,12 @@ module.exports.action = async (msg, args) => {
 					.setLabel('❌ Désativer')
 					.setStyle('DANGER'),
 		    )
+            .addComponents(
+				new MessageButton()
+					.setCustomId('cancel')
+					.setLabel('❌ Annuler')
+					.setStyle('SECONDARY'),
+		    )
         ;
         const send_question = await msg.channel.send( { embeds: [question], components: [row] })
 			.catch(console.error())
@@ -55,69 +60,85 @@ module.exports.action = async (msg, args) => {
 
 
 			// utilisation du collector !
-        const collector = new InteractionCollector(msg, m => m.author.id === AUTHORID, { time: 60000 });
-
+        //const collector = new InteractionCollector(msg, m => m.author.id === AUTHORID, { time: 60000 });
+        const collector = new InteractionCollector(client, m => m.author.id === AUTHORID, { time: 60000 });
         collector.on('collect', async (m) => {
 			let etat = ''
 
             if (m.customId === 'activate') {
                 etat = 'on';
-                send_question.delete();
                 const embed_on = new MessageEmbed()
                     .setColor(colorC)
                     .setTitle('Vous avez activé le message de bienvenue !')
                     .setFooter('Vous pouvez désactiver le message de bienvenue avec la commande `config-welcome`')
                 ;
-                const validation = await msg.channel.send({ embed: embed_on })
+                const validation = await m.channel.send({ embeds: [embed_on] })
+                // créer un salon pour le message de bienvenue
+                if( msg.member.guild.channels.cache.find(channel => channel.name === 'arrivés')){
+                    const channel = msg.member.guild.channels.cache.find(channel => channel.name === 'arrivés');
+                    channel.delete();
+                }
+                send_question.delete();
+                const chan = await msg.guild.channels.create('Arrivés', {
+                        type: 'text',
+                        permissionOverwrites: [
+                            {
+                                id: msg.guild.id,
+                                deny: ['SEND_MESSAGES'],
+                                allow: ['VIEW_CHANNEL'],
+                            },
+                        ],
+                    })
                 setTimeout(() => {
                     validation.delete();
-                } , 2000);
+                } , 5000);
             } else if (m.customId === 'desactivate') {
                 etat = 'off';
-                send_question.delete();
                 const embed_off = new MessageEmbed()
-                    .setColor(colorC)
+                    .setColor('GREEN')
                     .setTitle('Vous avez désactivé le message de bienvenue !')
                     .setFooter('Vous pouvez activer le message de bienvenue avec la commande `config-welcome`')
                 ;
-                const validation = await msg.channel.send({ embed: embed_off })
+                if (wlc_db['status'][msg.guild.id]) {
+                    delete (wlc_db['status'][msg.guild.id]);
+                }
+                send_question.delete();
+                const validation = await m.channel.send({ embeds: [embed_off] })
                 setTimeout(() => {
                     validation.delete();
-                } , 2000);
+                } , 5000);
             } else if (m.customId === 'cancel') {
-                send_question.delete();
                 const embed_cancel = new MessageEmbed()
                     .setColor(colorC)
                     .setTitle('Commande annulée !')
                     .setFooter('Vous pouvez activer ou désactiver le message de bienvenue avec la commande `config-welcome`')
                 ;
-                const validation = await msg.channel.send({ embed: embed_cancel })
+                msg.delete();
+                send_question.delete();
+
+                const validation = await msg.channel.send({ embeds: [embed_cancel] })
                 setTimeout(() => {
                     validation.delete();
-                } , 2000);
+                } , 5000);
                 return collector.stop('cancel');
             }
 			
-            if (wlc_db['prefix'][msgg.guild.id]) {
-                delete (wlc_db['prefix'][msgg.guild.id]);
+            if (wlc_db['status'][msg.guild.id]) {
+                delete (wlc_db['status'][msg.guild.id]);
 
-                wlc_db['prefix'][msgg.guild.id] = {};
-                wlc_db['prefix'][msgg.guild.id] = {
+                wlc_db['status'][msg.guild.id] = {};
+                wlc_db['status'][msg.guild.id] = {
                     etat,
                 };
             }
             else {
-                wlc_db['prefix'][msgg.guild.id] = {};
-                wlc_db['prefix'][msgg.guild.id] = {
+                wlc_db['status'][msg.guild.id] = {};
+                wlc_db['status'][msg.guild.id] = {
                     etat,
                 };
             }
             fs.writeFileSync('./dbs/wellcome.json', JSON.stringify(wlc_db));
-            msgg.delete();
-            const accept_send = await msgg.channel.send({ embeds: [configured] });
-            setTimeout(() => {
-                accept_send.delete();
-            }, 5000);
+            msg.delete();
             collector.stop();
         });
 	}

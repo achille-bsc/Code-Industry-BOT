@@ -15,7 +15,7 @@ webhookClient.send({
 
 require('dotenv').config();
 
-const manager = new ShardingManager('./bot.js', { token: process.env.TEST});
+const manager = new ShardingManager('./bot.js', { token: process.env.BOT});
 
 manager.on('shardCreate', shard => {
     shardID = shard.id + 1;
