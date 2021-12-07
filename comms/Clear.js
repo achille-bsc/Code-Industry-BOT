@@ -16,13 +16,15 @@ module.exports.check = (args) => {
 module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
+		msg.delete();
 		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		
 		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
 			return msg.channel.send({ embeds: [embeds.erreur(msg, `Vous n'avez pas la permission d'utiliser cette commande !`)] });
 		}
-		await embeds.question(msg, 'Combien de messages souhaitez-vous supprimer ?', 'Vous devez donner un nombre compris entre `1` et `195` !	')
-			.catch(console.error());
+		const question_msg = await embeds.question(msg, `Combien de messages souhaitez-vous supprimer ?', 'Vous devez donner un nombre compris entre \`1\` et \`195\` !
+		> \`cancel\` => Annuler la commande`)
+			.catch();
 		// utilisation du collector !
 		const collector = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 30000 });
 		collector.on('collect', async msgg => {
@@ -32,50 +34,53 @@ module.exports.action = async (msg, args) => {
 					.setTitle('Commande annulée !')
 					.setColor('YELLOW');
 				msgg.delete();
-				const anul_send = await msgg.channel.send({ embeds:[annule] });
+				question_msg.delete();
+				const cancel = await msgg.channel.send({ embeds:[annule] });
 				setTimeout(() => {
-					anul_send.delete();
+					cancel.delete();
 				}, 5000);
 				collector.stop();
-			}
-			if (msgg.content > 198 || msgg.content < 1) {
-				const not_exact = new MessageEmbed()
-					.setTitle('Vous devez citer un nombre compris entre 1 et 198')
-					.setColor(colorC);
-				msgg.channel.send({ embeds: [not_exact] })
-					.catch(msgg.channel.send(new MessageEmbed() .setTitle('Vous devez mettre un nombre') .setDescription('Vous ne venez pas de citer un nombre. Vous devez citer un nombre compris entre 1 et 198')),
-					);
-			}	
-			else {
-				const number = parseInt(msgg.content) + 3;
-				if (number > 99) {
-					const number1 = number / 2;
-					const number2 = number / 2;
-					if (number1 % 1 === 0.5) {
-						const number3 = number1 + 0.5;
-						const number4 = number2 - 0.5;
-						msgg.channel.bulkDelete(number3, true).catch();
-						await waiting(1000);
-						msgg.channel.bulkDelete(number4, true).catch();
-						await collector.stop();
+			} else {
+		
+				if (msgg.content > 198 || msgg.content < 1) {
+					const not_exact = new MessageEmbed()
+						.setTitle('Vous devez citer un nombre compris entre 1 et 198')
+						.setColor(colorC);
+					msgg.channel.send({ embeds: [not_exact] })
+						.catch(msgg.channel.send(new MessageEmbed() .setTitle('Vous devez mettre un nombre') .setDescription('Vous ne venez pas de citer un nombre. Vous devez citer un nombre compris entre 1 et 198')),
+						);
+				}	
+				else {
+					const number = parseInt(msgg.content) + 3;
+					if (number > 99) {
+						const number1 = number / 2;
+						const number2 = number / 2;
+						if (number1 % 1 === 0.5) {
+							const number3 = number1 + 0.5;
+							const number4 = number2 - 0.5;
+							msgg.channel.bulkDelete(number3, true).catch();
+							await waiting(1000);
+							msgg.channel.bulkDelete(number4, true).catch();
+							await collector.stop();
+						}
+						else {
+							msgg.channel.bulkDelete(number1, true).catch();
+							await waiting(1000);
+							msgg.channel.bulkDelete(number2, true).catch();
+							await collector.stop();
+							embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
+
+						}
 					}
 					else {
-						msgg.channel.bulkDelete(number1, true).catch();
-						await waiting(1000);
-						msgg.channel.bulkDelete(number2, true).catch();
+
+						await msgg.channel.bulkDelete(number, true).catch();
+						const rep = await embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
 						await collector.stop();
-						embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
-
+						setTimeout(() => {
+							rep.delete();
+						}, 5000);
 					}
-				}
-				else {
-
-					await msgg.channel.bulkDelete(number, true).catch();
-					const rep = await embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
-					await collector.stop();
-					setTimeout(() => {
-						rep.delete();
-					}, 5000);
 				}
 			}
 		});

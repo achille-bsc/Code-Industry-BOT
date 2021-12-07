@@ -1,10 +1,18 @@
 // -----commande console----- npx eslint --ext .js --ignore-path .gitignore .-----
 
 // -----Paramétrage API Discord.js
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, WebhookClient } = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
 const COLOR = require('./dbs/color-embeds.json');
+
+const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/916664771980456027/aP8WZUz92mRmig4zJ2ykLEzyEhZm97wGT8RPB2ELzOUODwYV3dk2HNoQY39uN_nnGviH' });
+
+const start_emb = new MessageEmbed()
+        .setTitle(`Bot Oppérationnelle !`)
+        .setColor('GREEN')
+		.setDescription('Le bot est désormais oppérationelle !\n Vous pouvez dès maintenent l\'utiliser !')
+
 
 require('dotenv').config();
 
@@ -20,7 +28,6 @@ const PREFIXFILE = require('./dbs/prefix.json');
 
 
 // -----Imports Fichers de Commandes-----
-const COLOREMBED = require('./comms/Config-embed');
 // const CONFIG = require('./comms/config.js')
 const HELP = require('./comms/Help');
 const HOST = require('./comms/Host');
@@ -45,6 +52,7 @@ const CONFIGMETEO = require('./comms/Config-météo');
 const CONFIGWELLCOME = require('./comms/Config-Welcome');
 const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
 const ADMINTICKET = require('./comms/Config-Ticket');
+const COLOREMBED = require('./comms/Config-embed')
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -52,6 +60,11 @@ client.discordTogether;
 
 
 client.on('ready', () => {
+	webhookClient.send({
+		username: 'Shards',
+		avatarURL: 'https://cdn.discordapp.com/attachments/909467674021605428/916664103630692433/Logo_Code_Industry.png',
+		embeds: [start_emb],
+	});
 
 	let i = 0;
 
@@ -96,10 +109,11 @@ client.on('messageCreate', async msg => {
 		if (content === 'prefix') {
 			const prefix_embed = new MessageEmbed()
 				.setTitle('<a:online:903897219600638002> Code Industry est opérationnel !')
-				.setDescription(`Le préfixe utilisé sur le serveur est ${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}.
+				.setDescription(`Le préfixe utilisé sur le serveur est \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}\`.
 				Pour exécuter une commande, vous pouvez faire \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}[commande]\`
+				éxemple => \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}help\`
 				
-				Pour modifier ce préfix, utilisez la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}[prefix]\`
+				Pour modifier ce préfix, utilisez la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}prefix\`
 				Rendez-vous sur le [support](https://discord.gg/yG3PuG8qXe) pour plus d'aide ou d'informations.`)
 				.setFooter(`${msg.guild.name}・`)
 				.setColor(colorC)
@@ -428,6 +442,84 @@ client.on('debug', (...args) => {
 });
 
 */
+client.on('interactionCreate', async interaction => {
+	const embeds = require('./functions-handler/embeds')
+	if (!interaction.isButton()) return;
+	if(interaction.customId === 'ticket') {
+		const member_name = interaction.member.user.username.toLocaleLowerCase().replace(' ', '-')
+		const erreur_ever_opened = new MessageEmbed()
+			.setTitle('Une erreur est survenue !')
+			.setColor('#DB0501')
+			.setDescription(`Vous avez déjà un ticket d'ouvert sur le serveur ! Vous ne pouvez pas en ouvrir un deuxieme !`)
+		if(interaction.guild.channels.cache.find(chan => chan.name === `ticket-${member_name}`)) return interaction.reply( { embeds: [erreur_ever_opened], ephemeral: true } )
+		const catégorie = await interaction.guild.channels.cache.find(cat=> cat.name === `Ticket` || cat.name === `ticket` || cat.name === `Tickets` || cat.name === `tickets`)
+		const channel = await interaction.guild.channels.create(`Ticket ${interaction.member.user.username}`, {
+			type: 'GUILD_TEXT',
+			permissionOverwrites: [{
+				id: interaction.guild.id,
+				deny: ['VIEW_CHANNEL'],
+			}],
+			parent: catégorie
+		});
+		interaction.reply({ content: `Votre ticket <#${channel.id}> à été créé avec succès !`, ephemeral: true })
+		const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
+		const message_ticket_db = require('./dbs/ticket-message.json') 
+		const message_ticket = message_ticket_db['message']?.[interaction.guild.id]['message_into_ticket']
+		const open_ticket = new MessageEmbed()
+			.setTitle(`Ticket ${interaction.guild.name}`)
+			.setDescription(message_ticket || `${interaction.member.user.username}, n'hésitez pas à dire au staff le sujet de ce ticket \:wink:`)
+			.setColor(colorC)
+		;
+
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('close')
+					.setLabel('Fermer le Ticket')
+					.setStyle('DANGER'),
+			)
+		;
+
+
+		channel.send({ embeds: [open_ticket], components: [row] })
+	}
+	if(interaction.customId === 'close') {
+		const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
+		
+		const open_ticket = new MessageEmbed()
+			.setTitle(`Ticket ${interaction.guild.name}`)
+			.setDescription(`${interaction.member.user.username}, vous vous apprétez à supprimer ce ticket. Etes-vous certain de vouloire faire ça ?`)
+			.setColor(colorC)
+		;
+
+		const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId('close_valide')
+					.setLabel('Fermer Définitivement')
+					.setStyle('DANGER'),
+			)
+			.addComponents(
+				new MessageButton()
+					.setCustomId('close_unvalide')
+					.setLabel('❌ Anuler')
+					.setStyle('SECONDARY'),
+			)
+		;
+
+
+		interaction.reply({ embeds: [open_ticket], components: [row]})
+		
+	}
+	if(interaction.customId === 'close_valide') {
+		interaction.channel.delete();
+	}
+
+	if(interaction.customId === 'close_unvalide') {
+		interaction.message.delete();
+		
+	}
+});
 
 
 
