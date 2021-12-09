@@ -1,1 +1,1 @@
-{"message":{"848598227301040159":{"message_into_ticket":"Message ticket"},"854026188565774376":{"message_into_ticket":"Bienvenue dans ton TICKET !"}}}
+{"message":{"848598227301040159":{"message_into_ticket":"${msg.member.user.username}, n'hésitez pas à dire au staff le sujet de ce ticket 😉"}}}

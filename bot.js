@@ -51,7 +51,7 @@ const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
 const CONFIGWELLCOME = require('./comms/Config-Welcome');
 const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
-const ADMINTICKET = require('./comms/Config-Ticket');
+const ADMINTICKET = require('./comms/Adminticket');
 const COLOREMBED = require('./comms/Config-embed')
 
 // const CONFIGMETEO = require('./comms/Config-météo');
@@ -346,8 +346,9 @@ client.on('interactionCreate', async interaction => {
 				const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('⚙️ Configuration - Commandes de Configuration')
-					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed:** Configure la couleur des embeds du serveur.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}préfix:** Configure le préfix du bot sur le serveur.`)
+					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed:** Configure la couleur des principaux messages du bot.
+				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}préfix:** Configure le préfix du bot.
+				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket:** Configure le système de tickets.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -376,7 +377,7 @@ client.on('interactionCreate', async interaction => {
 				const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('🛠️ Utilitaire - Commandes Utilitaires')
-					.setDescription(`> **${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}joke:** Envoit une blague parmis une archive de plus de 1070 blagues.
+					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}joke:** Envoit une blague parmis une archive de plus de 1070 blagues.
 				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}lock:** Vérouille un salon textuel ( **unlock:** Pour le réouvrir ).
 				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}poll:** Ouvre un sondage sur le serveur.
 				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say:** Fais parler le bot.
@@ -419,8 +420,10 @@ client.on('guildMemberAdd', async (member) => {
 });
 
 client.on('guildMemberRemove', async (member) => {
+	const wlc_db = require('./dbs/goodbye.json');
 	const colorC = COLOR['color-embed'][member.guild.id]?.color || '#4ed5f8';
 	const guild = member.guild;
+	const etat = goodbye_db[member.guild.id]?.etat;
 	const member_count = guild.memberCount;
 	const members_embed = new MessageEmbed()
 		.setTitle('💔 Au revoir !')

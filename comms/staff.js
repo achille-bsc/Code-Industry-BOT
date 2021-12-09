@@ -2,6 +2,7 @@ const { MessageEmbed, MessageCollector, WebhookClient, Permissions, Invite, Invi
 const commandeFormat = 'staff';
 const ALIAS = [];
 const COLOR = require('../dbs/color-embeds.json');
+const embeds = require('../functions-handler/embeds')
 
 module.exports.check = (args) => {
 	return (commandeFormat.split(' ')[0] == args[0] || ALIAS.includes(args[0]));
@@ -14,7 +15,7 @@ module.exports.check = (args) => {
 module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
-		const invite = await msg.channel.createInvite({temporary: false, reason: `Demande d'aide au staff du Bot Code Industry`})
+		const invite = await msg.channel.createInvite({temporary: false, reason: `Demande d'aide au staff du Bot Code Industry`}).catch(embeds.erreur(msg, `Une erreur s'est produite lors de l'éxécution de cette commande. La créeation d'un lien d'invitation est impossible. Veuillez ajouter ces permissions au bot ou aller voir le [staff](https://discord.gg/tCmb8yGZYw).`))
 
 		const nperm = new MessageEmbed()
 			.setTitle('Erreur')
