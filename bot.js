@@ -350,8 +350,8 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('🏠 Acceuil')
 					.setDescription(`**Quelques liens utiles:**
-				> [Support](https://discord.gg/tCmb8yGZYw)
-				> [Inviter le bot](https://discord.com/oauth2/authorize?client_id=902293972091801620&scope=bot&permissions=8589934591)`)
+> [Support](https://discord.gg/tCmb8yGZYw)
+> [Inviter le bot](https://discord.com/oauth2/authorize?client_id=902293972091801620&scope=bot&permissions=8589934591)`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 				;
@@ -364,9 +364,9 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle(`🔨 Modération - Commandes de Modération`)
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}kick :** Éxpulse un membre du serveur.
-					> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ban :** Banni un membre du serveur.
-					> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}lock :** Vérouille un salon textuel.
-					> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}staff :** Pour demander de l'aide au staff dirrectement depuis votre serveur (vaut mieux donner un lien d'invitation dans votre requête 😉)`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ban :** Banni un membre du serveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}lock :** Vérouille un salon textuel.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}staff :** Pour demander de l'aide au staff dirrectement depuis votre serveur (vaut mieux donner un lien d'invitation dans votre requête 😉)`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 				;
@@ -379,7 +379,7 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('💬 Conversation - Commandes de Conversations')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}clear :** Supprime un nombre de messages compris entre 1 et 19
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say :** Pour faire parler le bot à votre place.`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say :** Pour faire parler le bot à votre place.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -392,8 +392,8 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('⚙️ Configuration - Commandes de Configuration')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed :** Configure la couleur des principaux messages du bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}préfix :** Configure le préfix du bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}préfix :** Configure le préfix du bot.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -406,11 +406,11 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('💡 Informations - Commandes d\'Informations')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}help :** Donne la liste des commandes du bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}host :** Envoit des informations relatives à l'hébergement du bot.
-				> **i${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}nvite :** Invite le bot sur tonserveur.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ping :** Donne la latence du bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}support :** Lien vers le serveur support.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Donne toutes les informations relatives à un utilisateur.`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}host :** Envoit des informations relatives à l'hébergement du bot.
+> **i${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}nvite :** Invite le bot sur tonserveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ping :** Donne la latence du bot.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}support :** Lien vers le serveur support.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Donne toutes les informations relatives à un utilisateur.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -423,14 +423,14 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('🛠️ Utilitaire - Commandes Utilitaires')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}joke :** Envoit une blague parmis une archive de plus de 1070 blagues.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}lock :** Vérouille un salon textuel ( **unlock:** Pour le réouvrir ).
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}poll :** Ouvre un sondage sur le serveur.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say :** Fais parler le bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ticket :** Ouvre un ticket sur le serveur ( **close**: Pour le fermer).
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}suggestion-bot :** Faire une suggestion au bot.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Pour voir différentes informations sur un membre du serveur.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}meteo :** Donne la météo pour un lieux donné.
-				> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}staff :** Permet de contacter le staff du bot en cas de problème avec le bot sur votre serveur *( il vaut mieux donner un liens d'invitation vers celui-ci pour plus d'éfficacité )*`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}lock :** Vérouille un salon textuel ( **unlock:** Pour le réouvrir ).
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}poll :** Ouvre un sondage sur le serveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say :** Fais parler le bot.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ticket :** Ouvre un ticket sur le serveur ( **close**: Pour le fermer).
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}suggestion-bot :** Faire une suggestion au bot.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Pour voir différentes informations sur un membre du serveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}meteo :** Donne la météo pour un lieux donné.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}staff :** Permet de contacter le staff du bot en cas de problème avec le bot sur votre serveur *( il vaut mieux donner un liens d'invitation vers celui-ci pour plus d'éfficacité )*`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
