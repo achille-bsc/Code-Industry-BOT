@@ -5,7 +5,7 @@ const COLOR = require('../dbs/color-embeds.json');
 
 const ALIAS = [];
 
-const embeds = require('../functions-handler/embeds');
+const emebds = require('../functions-handler/embeds');
 const mess = require('../functions-handler/messages')
 
 module.exports.check = (args) => {

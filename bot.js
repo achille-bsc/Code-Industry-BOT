@@ -1,24 +1,70 @@
 // -----commande console----- npx eslint --ext .js --ignore-path .gitignore .-----
 
 // -----Paramétrage API Discord.js
+
+const { SlashCommandBuilder,
+	SlashCommandBooleanOption,
+	SlashCommandIntegerOption,
+	SlashCommandChannelOption,
+	SlashCommandMentionableOption,
+	SlashCommandNumberOption,
+	SlashCommandRoleOption,
+	SlashCommandStringOption,
+	SlashCommandSubcommandBuilder,
+	SlashCommandSubcommandGroupBuilder,
+	SlashCommandUserOption
+} = require('@discordjs/builders');
+
 const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, WebhookClient } = require('discord.js');
 const { Client, Intents } = require('discord.js');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS] });
+const client = new Client({ intents: [
+	Intents.FLAGS.GUILDS,
+	Intents.FLAGS.GUILD_MESSAGES,
+	Intents.FLAGS.GUILD_MEMBERS,
+	Intents.FLAGS.GUILD_MESSAGE_REACTIONS,] });
 const COLOR = require('./dbs/color-embeds.json');
 
-const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/916664771980456027/aP8WZUz92mRmig4zJ2ykLEzyEhZm97wGT8RPB2ELzOUODwYV3dk2HNoQY39uN_nnGviH' });
 
-const start_emb = new MessageEmbed()
-        .setTitle(`Bot Oppérationnelle !`)
-        .setColor('GREEN')
-		.setDescription('Le bot est désormais oppérationelle !\n Vous pouvez dès maintenent l\'utiliser !')
+// slash commands manager (discord.js)
+/*const giveaway = new SlashCommandBuilder()
+	.setName('giveaway')
+	.setDescription('Créer un giveaway')
+	.addNumberOption(option => option 
+		.setName('durée')
+		.setDescription('Durée du giveaway')
+		.setRequired(true)
+	)
+	.addStringOption(option => option
+		.setName('unitée')
+		.setDescription('Unité de temps du giveaway')
+		.setRequired(true)
+		.addChoices(['m', 'h', 'd'])
+	)
+	.addNumberOption(option => option
+		.setTitle('gagnant')
+		.setDescription('Nombre de gagnant')
+		.setRequired(true)
+	)
+	.addStringOption(option => option
+		.setName('prix')
+		.setDescription('Prix gagnant du giveaway')
+	)
+;*/
+
+
+
+
+
+const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks/921055065979109408/L3UPiBAJKp_sMxSoT3L2RBjgrnkZyaQJochRKvXU-vrOgvgQLnKypOMenX1bAM_wVhVn' });
+
 
 
 require('dotenv').config();
-
+const BOT = process.env.BOT;
+const TEST = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(process.env.BOT);
+client.login(`OTAyMjkzOTcyMDkxODAxNjIw.YXcUvg.SLGIIiNqRmjh9jOPxkI-pygEmic`);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -60,20 +106,18 @@ client.discordTogether;
 
 
 client.on('ready', () => {
-	webhookClient.send({
-		username: 'Shards',
-		avatarURL: 'https://cdn.discordapp.com/attachments/909467674021605428/916664103630692433/Logo_Code_Industry.png',
-		embeds: [start_emb],
-	});
+	
 
+	//client.guilds.cache.get()
+		console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
+		console.log(''),
+		console.log('	 - Bot Oppérationnel'),
+		console.log(''),
+		console.log(''),
+		console.log('');
 	let i = 0;
 
-	console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
-	console.log(''),
-	console.log('	 - Bot Oppérationnel'),
-	console.log(''),
-	console.log(''),
-	console.log('');
+	
 
 	// Statut du Bot
 	const statuses = [
@@ -469,8 +513,8 @@ client.on('interactionCreate', async interaction => {
 		const message_ticket_db = require('./dbs/ticket-message.json') 
 		const message_ticket = message_ticket_db['message']?.[interaction.guild.id]['message_into_ticket']
 		const open_ticket = new MessageEmbed()
-			.setTitle(`Ticket ${interaction.guild.name}`)
-			.setDescription(message_ticket || `${interaction.member.user.username}, n'hésitez pas à dire au staff le sujet de ce ticket \:wink:`)
+			.setTitle(`Ticket・${interaction.guild.name}`)
+			.setDescription(`\`${message_ticket}\`` || `${interaction.member.user.username}, n'hésitez pas à dire au staff le sujet de ce ticket \:wink:`)
 			.setColor(colorC)
 		;
 
@@ -526,9 +570,42 @@ client.on('interactionCreate', async interaction => {
 
 
 
-//total guilds with sharding 
-/*client.shard.fetchClientValues('guilds.cache.size')
-	.then(results => {
-		msg.channel.send( { content: `${results.reduce((acc, guildCount) => acc + guildCount, 0)} total guilds`});
-	})
-	.catch(console.error);*/
+//giveaway système !
+
+/*const { GiveawaysManager } = require('discord-giveaways');
+
+const manager = new GiveawaysManager(client, {
+    storage: './dbs/giveaways.json',
+    default: {
+        botsCanWin: false,
+        embedColor: 'GREEN',
+        embedColorEnd: 'RED',
+        reaction: '🎁'
+    }
+});
+
+client.giveawaysManager = manager;
+
+
+client.on('interactionCreate', (interaction) => {
+
+    const ms = require('ms');
+
+    if (interaction.isCommand() && interaction.commandName === 'start') {
+        // /start 2d 1 Awesome prize!
+        // Will create a giveaway with a duration of two days, with one winner and the prize will be "Awesome prize!"
+
+        const duration = interaction.options.getNumber('durée') + interaction.options.getString('unitée');
+        const winnerCount = interaction.options/getNumber('winners');
+        const prize = interaction.options.getString('prize');
+
+        client.giveawaysManager.start(interaction.channel, {
+            duration: ms(duration),
+            winnerCount,
+            prize
+    }).then((gData) => {
+            console.log(gData); // {...} (messageId, end date and more)
+        });
+        // And the giveaway has started!
+    }
+});*/
