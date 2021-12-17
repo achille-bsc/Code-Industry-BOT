@@ -20,9 +20,7 @@ module.exports.action = (msg, args) => {
 		const exampleEmbed = new MessageEmbed()
 			.setColor(colorC)
 			.setTitle('Hébergement du bot')
-			.setDescription('Le bot est hébergé sur un serveur dédié de [dev-time](https://hosting.dev-time.eu/) dont voici les statistiques :')
-			.addField('Éspace de stockage', '4,88 Go')
-			.addField('RAM', '512 Mo')
+			.setDescription('Le bot est hébergé sur un [serveur dédié de eheberg](https://www.eheberg.com/)')
         ;
 		msg.channel.send({ embeds: [exampleEmbed] });
 	}
