@@ -407,7 +407,7 @@ client.on('interactionCreate', async interaction => {
 					.setTitle('💡 Informations - Commandes d\'Informations')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}help :** Donne la liste des commandes du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}host :** Envoit des informations relatives à l'hébergement du bot.
-> **i${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}nvite :** Invite le bot sur tonserveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}invite :** Invite le bot sur tonserveur.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ping :** Donne la latence du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}support :** Lien vers le serveur support.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Donne toutes les informations relatives à un utilisateur.`)
