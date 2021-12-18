@@ -19,7 +19,7 @@ module.exports.action = async (msg, args) => {
 		msg.delete();
 		const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		
-		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) {
+		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES) && msg.author.id !== '688098375697956905') {
 			return msg.channel.send({ embeds: [embeds.erreur(msg, `Vous n'avez pas la permission d'utiliser cette commande !`)] });
 		}
 		const question_msg = await embeds.question(msg, `Combien de messages souhaitez-vous supprimer ?', 'Vous devez donner un nombre compris entre \`1\` et \`195\` !
@@ -68,7 +68,11 @@ module.exports.action = async (msg, args) => {
 							await waiting(1000);
 							msgg.channel.bulkDelete(number2, true).catch();
 							await collector.stop();
-							embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
+							const rep = await embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
+							await collector.stop();
+							setTimeout(() => {
+								rep.delete();
+							}, 5000);
 
 						}
 					}

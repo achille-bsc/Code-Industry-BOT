@@ -60,8 +60,8 @@ const webhookClient = new WebhookClient({ url: 'https://discord.com/api/webhooks
 
 
 require('dotenv').config();
-const BOT = process.env.BOT;
-const TEST = process.env.TEST;
+const bot = process.env.BOT;
+const test = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
 client.login(`OTAyMjkzOTcyMDkxODAxNjIw.YXcUvg.SLGIIiNqRmjh9jOPxkI-pygEmic`);
@@ -99,15 +99,14 @@ const CONFIGWELLCOME = require('./comms/Config-Welcome');
 const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
 const ADMINTICKET = require('./comms/Adminticket');
 const COLOREMBED = require('./comms/Config-embed')
+const BOT = require('./comms/bot');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
 client.discordTogether;
 
-
-client.on('ready', () => {
-	
-
+const embeds = require('./functions-handler/embeds');
+client.on('ready', async () => {
 	//client.guilds.cache.get()
 		console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
 		console.log(''),
@@ -293,6 +292,10 @@ client.on('messageCreate', async msg => {
 				return ADMINTICKET.action(msg, args, client,
 				);
 			}
+			if (BOT.check(args)) {
+				return BOT.action(msg, args, client,
+				);
+			}
 		}
 	}
 	else if (args[0].startsWith('-')) {
@@ -378,7 +381,7 @@ client.on('interactionCreate', async interaction => {
 				const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('💬 Conversation - Commandes de Conversations')
-					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}clear :** Supprime un nombre de messages compris entre 1 et 19
+					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}clear :** Supprime un nombre de messages compris entre 1 et 195.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}say :** Pour faire parler le bot à votre place.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
@@ -392,7 +395,7 @@ client.on('interactionCreate', async interaction => {
 				const help_embed_2 = new MessageEmbed()
 					.setTitle('⚙️ Configuration - Commandes de Configuration')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed :** Configure la couleur des principaux messages du bot.
-> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}préfix :** Configure le préfix du bot.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}prefix :** Configure le préfix du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
@@ -407,7 +410,7 @@ client.on('interactionCreate', async interaction => {
 					.setTitle('💡 Informations - Commandes d\'Informations')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}help :** Donne la liste des commandes du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}host :** Envoit des informations relatives à l'hébergement du bot.
-> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}invite :** Invite le bot sur tonserveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}invite :** Invite le bot sur ton serveur.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}ping :** Donne la latence du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}support :** Lien vers le serveur support.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}avatar :** Donne toutes les informations relatives à un utilisateur.`)
@@ -468,7 +471,7 @@ client.on('guildMemberRemove', async (member) => {
 	const wlc_db = require('./dbs/goodbye.json');
 	const colorC = COLOR['color-embed'][member.guild.id]?.color || '#4ed5f8';
 	const guild = member.guild;
-	const etat = goodbye_db[member.guild.id]?.etat;
+	const etat = wlc_db[member.guild.id]?.etat;
 	const member_count = guild.memberCount;
 	const members_embed = new MessageEmbed()
 		.setTitle('💔 Au revoir !')

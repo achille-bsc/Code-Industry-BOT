@@ -63,7 +63,7 @@ module.exports.action = async (msg, args) => {
 							{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Brilliance`' },
 							{ name: 'Autres Badges', value: `${member_collected.user.flags.toArray()}` });
 					msg.channel.send({ embeds: [avatar] });
-					await send_question.delete();
+					send_question.delete();
 				}
 				else if (member_collected.user.flags.toArray().includes('HOUSE_BALANCE')) {
 					// eslint-disable-next-line no-shadow

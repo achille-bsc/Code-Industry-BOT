@@ -22,7 +22,7 @@ webhookClient.send({
 
 require('dotenv').config();
 
-const manager = new ShardingManager('./bot.js', { shardList: 'auto', totalShards: 4, token: `OTAyMjkzOTcyMDkxODAxNjIw.YXcUvg.SLGIIiNqRmjh9jOPxkI-pygEmic` });
+const manager = new ShardingManager('./bot.js', { shardList: 'auto', totalShards: 2, token: `OTAyMjkzOTcyMDkxODAxNjIw.YXcUvg.SLGIIiNqRmjh9jOPxkI-pygEmic` });
 
 manager.on('shardCreate', shard => {
     if (TOKEN === BOT) {
