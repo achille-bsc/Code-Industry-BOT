@@ -49,9 +49,9 @@ module.exports.action = async (msg, args) => {
 					msgg.channel.send({ embeds: [not_exact] })
 						.catch(msgg.channel.send(new MessageEmbed() .setTitle('Vous devez mettre un nombre') .setDescription('Vous ne venez pas de citer un nombre. Vous devez citer un nombre compris entre 1 et 198')),
 						);
-				}	
+				}
 				else {
-					const number = parseInt(msgg.content) + 3;
+					const number = parseInt(msgg.content) + 2;
 					if (number > 99) {
 						const number1 = number / 2;
 						const number2 = number / 2;

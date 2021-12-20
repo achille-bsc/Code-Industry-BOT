@@ -25,7 +25,7 @@ const { MessageEmbed } = require("discord.js");
     return message.channel.send( { embeds: [this.embed("Information", info, 'BLUE')] });
   };
   function question (message, question, description) {
-    return message.channel.send( { embeds: [this.embed(question, description, 'YELLOW')] });
+    return message.channel.send( { embeds: [this.embed(question, description, 'BLUE')] });
   };
 
 

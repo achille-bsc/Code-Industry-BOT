@@ -22,7 +22,7 @@ module.exports.action = async (msg, args) => {
 			.setDescription(`**Quelques liens utiles:**
 			> [Support](https://discord.gg/tCmb8yGZYw)
 			> [Inviter le bot](https://discord.com/oauth2/authorize?client_id=902293972091801620&scope=bot&permissions=8589934591)
-			> [Site Web](https://frenchsimu.github.io/Code-Industry-website/)`)
+			> [Site Web](https://frenchsimu.github.io/Code-Industry-website/pages/acceuil/)`)
 			.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 			.setColor(colorC)
 		;
