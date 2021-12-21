@@ -33,10 +33,11 @@ module.exports.action = async (msg, args) => {
             m.delete();
             demande_button.delete();
             if( m.content.length < 80 ) {
-                embeds.success(msg, `Le message \`${m}\` a bien été ajouté au rôle-réaction !`);
+                const m_embed = await embeds.success(msg, `Le message \`${m}\` a bien été ajouté au rôle-réaction !`);
                 collector.stop();
             } else {
                 embeds.erreur(msg, `Le message est trop long !`);
+                collector.stop();
                 return;
             }
             content = m.content;
@@ -61,22 +62,28 @@ module.exports.action = async (msg, args) => {
                     collector1.stop();
                 } else {
                     embeds.erreur(msg, `La couleur n'est pas valide !`);
+                    collector1.stop();
                     return;
                 }
-                const demande_rôle = await embeds.question(msg, `Quelle rôle voullez-vous que le boutton ajoute ?`, `Veuillez ne spécier que l'id du rôle.`)
+                const demande_role = await embeds.question(msg, 'Quelle rôle voullez-vous que le boutton ajoute ?', 'Veuillez ne spécifier que l\'id du rôle')
+                
                 let collector2 = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
-                collector2.on('collect', async m2 => {
-                    
-                    demande_rôle.delete();
-                    if(m2.content.length === 18) {
-                        const role = await m2.guild.roles.fetch(m2.content);
+                collector2.on('collect', async m3 => {
+                    if(msg.author.bot) return;
+                    //m3.delete()
+                    m3.delete();
+                    console.log('000')
+                    demande_role.delete();
+                    console.log('001')
+                    if(m3.content.length === 18) {
+                        const role = await m3.guild.roles.fetch(m3.content);
                         if(role) {
-                            role_id = m2.content;
-                            const Rolereact = new MessageEmbed()
+                            role_id = m3.content;
+                            const rolereact = new MessageEmbed()
                                 .setTitle(`Rôle-réaction`)
                                 .setDescription(`Appuyez sur le boutton ci-dessous pour avoir le rôle \`${role.name}\``)
                                 .setColor(colorC)
-                                .setTimestamp
+                                .setTimestamp()
                             ;
                             const row = new MessageActionRow()
                                 .addComponents(
@@ -85,15 +92,20 @@ module.exports.action = async (msg, args) => {
                                         .setLabel(content)
                                         .setStyle(color),
                                 );
-                            msg.channel.send({ embeds: [Rolereact], components: [row] })
-                            embeds.success(msg, `Le rôle-réaction a bien été ajouté au seveur !`)
-                            collector.stop();
+                            msg.channel.send({ embeds: [rolereact], components: [row] })
+                            const confirm = await embeds.success(msg, `Le rôle-réaction a bien été ajouté au seveur !`)
+                            setTimeout(() => {
+                                confirm.delete();
+                            }, 5000);
+                            collector2.stop();
                         } else {
                             embeds.erreur(msg, `Le rôle n'existe pas !`);
                             return;
                         }
                     }
-                    m2.delete();
+                    const PREFIXFILE = require('../dbs/prefix.json');
+                    embeds.erreur(msg, `\`${m3.content}\` n'est pas un rôle ou ce n'est pas son ID.`, `Si vous penssez qu'il s'aggit d'une erreur n'hésitez pas à contacter le staff du bot via la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}staff\``)
+                    collector2.stop();
                 });
             });
         });
@@ -103,10 +115,3 @@ module.exports.action = async (msg, args) => {
 		msg.reply ('Mauvaise commande, voila ce que j\'attend **' + commandeFormat + '**');
 	}
 };
-async function waiting(time = 5000) {
-	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve();
-		}, time);
-	});
-}

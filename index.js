@@ -579,6 +579,29 @@ client.on('interactionCreate', async interaction => {
 
 
 
+
+// ROLE  RÉACTIONS HANDLER
+client.on('interactionCreate', async interaction => {
+	if(interaction.isButton) {
+		const customid = interaction.customId;
+		if(customid.startsWith('rolereact-')) {
+			const role = interaction.guild.roles.cache.find(role => role.id === customid.replace('rolereact-', ''))
+			console.log(customid.replace('rolereact-', ''))
+			if(!role) return interaction.reply({ content: `Le role \`${customid.replace('rolereact-', '')}\` n'existe pas !` })
+			const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
+			const role_react_embed = new MessageEmbed()
+				.setTitle(`Rôle ${role.name}`)
+				.setDescription(`Le rôle ${role.name} vous à été ajouté avec succès !`)
+				.setColor(colorC)
+			;
+			interaction.reply({ embeds: [role_react_embed] })
+		}
+	}
+})
+
+
+
+
 //giveaway système !
 
 /*const { GiveawaysManager } = require('discord-giveaways');
