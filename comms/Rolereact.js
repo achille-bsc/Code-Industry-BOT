@@ -33,7 +33,7 @@ module.exports.action = async (msg, args) => {
             m.delete();
             demande_button.delete();
             if( m.content.length < 80 ) {
-                const m_embed = await embeds.success(msg, `Le message \`${m}\` a bien été ajouté au rôle-réaction !`);
+                embeds.success(msg, `Le message \`${m}\` a bien été ajouté au rôle-réaction !`);
                 collector.stop();
             } else {
                 embeds.erreur(msg, `Le message est trop long !`);
@@ -72,16 +72,25 @@ module.exports.action = async (msg, args) => {
                     if(msg.author.bot) return;
                     //m3.delete()
                     m3.delete();
-                    console.log('000')
+                    if(msg.author.bot) return;
                     demande_role.delete();
-                    console.log('001')
                     if(m3.content.length === 18) {
                         const role = await m3.guild.roles.fetch(m3.content);
                         if(role) {
+                            let messagee = ''
                             role_id = m3.content;
+                            if(color = 'SUCCESS') {
+                                messagee = '🟩'
+                            } else if (color = 'DANGER') {
+                                messagee = '🟥'
+                            } else if (color = 'PRIMARY') {
+                                messagee = '🟦'
+                            } else if (color = 'SECONDARY') {
+                                messagee = '⚫'
+                            }
                             const rolereact = new MessageEmbed()
                                 .setTitle(`Rôle-réaction`)
-                                .setDescription(`Appuyez sur le boutton ci-dessous pour avoir le rôle \`${role.name}\``)
+                                .setDescription(`${messagee} ${content} - \`${role.name}\``)
                                 .setColor(colorC)
                                 .setTimestamp()
                             ;
@@ -92,20 +101,18 @@ module.exports.action = async (msg, args) => {
                                         .setLabel(content)
                                         .setStyle(color),
                                 );
-                            msg.channel.send({ embeds: [rolereact], components: [row] })
-                            const confirm = await embeds.success(msg, `Le rôle-réaction a bien été ajouté au seveur !`)
-                            setTimeout(() => {
-                                confirm.delete();
-                            }, 5000);
+                            m3.channel.send({ embeds: [rolereact], components: [row] })
+                            embeds.success(msg, `Le rôle-réaction a bien été ajouté au seveur !`)
                             collector2.stop();
                         } else {
                             embeds.erreur(msg, `Le rôle n'existe pas !`);
                             return;
                         }
+                    } else {
+                        const PREFIXFILE = require('../dbs/prefix.json');
+                        embeds.erreur(msg, `\`${m3.content}\` n'est pas un rôle ou ce n'est pas son ID.`, `Si vous penssez qu'il s'aggit d'une erreur n'hésitez pas à contacter le staff du bot via la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}staff\``)
+                        collector2.stop();
                     }
-                    const PREFIXFILE = require('../dbs/prefix.json');
-                    embeds.erreur(msg, `\`${m3.content}\` n'est pas un rôle ou ce n'est pas son ID.`, `Si vous penssez qu'il s'aggit d'une erreur n'hésitez pas à contacter le staff du bot via la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}staff\``)
-                    collector2.stop();
                 });
             });
         });

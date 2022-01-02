@@ -1,0 +1,49 @@
+const demande_role = await embeds.question(msg, 'Quelle rôle voullez-vous que le boutton ajoute ?', 'Veuillez ne spécifier que l\'id du rôle')
+                
+                let collector2 = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
+                collector2.on('collect', async m3 => {
+                    if(msg.author.bot) return;
+                    //m3.delete()
+                    m3.delete();
+                    if(msg.author.bot) return;
+                    demande_role.delete();
+                    if(m3.content.length === 18) {
+                        const role = await m3.guild.roles.fetch(m3.content);
+                        if(role) {
+                            let messagee = ''
+                            role_id = m3.content;
+                            if(color = 'SUCCESS') {
+                                messagee = '🟩'
+                            } else if (color = 'DANGER') {
+                                messagee = '🟥'
+                            } else if (color = 'PRIMARY') {
+                                messagee = '🟦'
+                            } else if (color = 'SECONDARY') {
+                                messagee = '⚫'
+                            }
+                            const rolereact = new MessageEmbed()
+                                .setTitle(`Rôle-réaction`)
+                                .setDescription(`${messagee} ${content} - \`${role.name}\``)
+                                .setColor(colorC)
+                                .setTimestamp()
+                            ;
+                            const row = new MessageActionRow()
+                                .addComponents(
+                                    new MessageButton()
+                                        .setCustomId(`rolereact-${role_id}`)
+                                        .setLabel(content)
+                                        .setStyle(color),
+                                );
+                            m3.channel.send({ embeds: [rolereact], components: [row] })
+                            embeds.success(msg, `Le rôle-réaction a bien été ajouté au seveur !`)
+                            collector2.stop();
+                        } else {
+                            embeds.erreur(msg, `Le rôle n'existe pas !`);
+                            return;
+                        }
+                    } else {
+                        const PREFIXFILE = require('../dbs/prefix.json');
+                        embeds.erreur(msg, `\`${m3.content}\` n'est pas un rôle ou ce n'est pas son ID.`, `Si vous penssez qu'il s'aggit d'une erreur n'hésitez pas à contacter le staff du bot via la commande \`${PREFIXFILE.prefix[msg.guild.id]?.prefix || '-'}staff\``)
+                        collector2.stop();
+                    }
+                });

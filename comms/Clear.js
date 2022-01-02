@@ -61,6 +61,10 @@ module.exports.action = async (msg, args) => {
 							msgg.channel.bulkDelete(number3, true).catch();
 							await waiting(1000);
 							msgg.channel.bulkDelete(number4, true).catch();
+							const rep = await embeds.success(msg, `\`${number-2} messages ont étés supprimés avec succès !\``)
+							setTimeout(() => {
+								rep.delete();
+							}, 5000);await waiting();
 							await collector.stop();
 						}
 						else {
@@ -70,20 +74,17 @@ module.exports.action = async (msg, args) => {
 							await collector.stop();
 							const rep = await embeds.success(msg, `\`${number-2} messages ont étés supprimés avec succès !\``)
 							await collector.stop();
-							setTimeout(() => {
-								rep.delete();
-							}, 5000);
+							await waiting();
+							rep.delete();
 
 						}
 					}
 					else {
-
 						await msgg.channel.bulkDelete(number, true).catch();
-						const rep = await embeds.success(msg, `\`${number-3} messages ont étés supprimés avec succès !\``)
+						const rep = await embeds.success(msg, `\`${number} messages ont étés supprimés avec succès !\``)
 						await collector.stop();
-						setTimeout(() => {
-							rep.delete();
-						}, 5000);
+						await waiting()
+						rep.delete();
 					}
 				}
 			}

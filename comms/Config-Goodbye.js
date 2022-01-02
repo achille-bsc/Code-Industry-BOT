@@ -1,6 +1,6 @@
 const { Permissions, MessageEmbed, MessageCollector, MessageButton, InteractionCollector, MessageActionRow, } = require('discord.js');
-const commandeFormat = 'config-welgoodbyelcome';
-const ALIAS = ['config-gb', 'config-bye'];
+const commandeFormat = 'config-goodbye';
+const ALIAS = ['config-gb', 'config-bye', 'config-gbye', 'goodbye'];
 const wlc_db = require('../dbs/goodbye.json');
 const fs = require('fs');
 const COLOR = require('../dbs/color-embeds.json');

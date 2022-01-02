@@ -1,6 +1,6 @@
 const { Permissions, MessageEmbed, MessageCollector, MessageButton, InteractionCollector, MessageActionRow, } = require('discord.js');
 const commandeFormat = 'config-wellcome';
-const ALIAS = ['config-wlc', 'config-hello', 'config-wcm'];
+const ALIAS = ['config-wlc', 'config-hello', 'config-wcm', 'welcome'];
 const wlc_db = require('../dbs/wellcome.json');
 const fs = require('fs');
 const COLOR = require('../dbs/color-embeds.json');

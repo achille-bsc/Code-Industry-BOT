@@ -2,6 +2,9 @@
 
 // -----Paramétrage API Discord.js
 
+
+
+
 const { SlashCommandBuilder,
 	SlashCommandBooleanOption,
 	SlashCommandIntegerOption,
@@ -15,7 +18,7 @@ const { SlashCommandBuilder,
 	SlashCommandUserOption
 } = require('@discordjs/builders');
 
-const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, WebhookClient } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageSelectMenu, MessageButton, WebhookClient, GuildMemberRoleManager } = require('discord.js');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [
 	Intents.FLAGS.GUILDS,
@@ -64,7 +67,7 @@ const bot = process.env.BOT;
 const test = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(test);
+client.login(bot);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -101,6 +104,7 @@ const ADMINTICKET = require('./comms/Adminticket');
 const COLOREMBED = require('./comms/Config-embed')
 const BOT = require('./comms/bot');
 const ROLEREACT = require('./comms/Rolereact');
+const BADVOC = require('./comms/bad-voc');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -301,7 +305,25 @@ client.on('messageCreate', async msg => {
 				return ROLEREACT.action(msg, args, client,
 				);
 			}
+			/*if (BADVOC.check(args)) {
+				return BADVOC.action(msg, args, client,
+				);
+			}*/
+
+			
+			
 		}
+		const voc_db = require('./dbs/bad-voc.json');
+			const messageLowCase = msg.content.toLowerCase();
+			const allowed_bad_voc = require('./dbs/authorization.json')
+			if(!allowed_bad_voc.bad_voc.includes(msg.author.id)) {
+				for(let i = 0; i < args.length; i++) {
+					if(voc_db.voc.includes(args[i].toLocaleLowerCase())) {
+						msg.delete().catch();
+						msg.channel.send(`${msg.author}, vous avez utilisé un mot interdit !`);
+					}
+				}
+			}
 	}
 	else if (args[0].startsWith('-')) {
 		args[0] = args[0].substring(1);
@@ -401,7 +423,8 @@ client.on('interactionCreate', async interaction => {
 					.setTitle('⚙️ Configuration - Commandes de Configuration')
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed :** Configure la couleur des principaux messages du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}prefix :** Configure le préfix du bot.
-> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}rolereact :** Permet la configuration du système de RôleRéaction.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -586,18 +609,83 @@ client.on('interactionCreate', async interaction => {
 		const customid = interaction.customId;
 		if(customid.startsWith('rolereact-')) {
 			const role = interaction.guild.roles.cache.find(role => role.id === customid.replace('rolereact-', ''))
-			console.log(customid.replace('rolereact-', ''))
 			if(!role) return interaction.reply({ content: `Le role \`${customid.replace('rolereact-', '')}\` n'existe pas !` })
 			const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
 			const role_react_embed = new MessageEmbed()
 				.setTitle(`Rôle ${role.name}`)
-				.setDescription(`Le rôle ${role.name} vous à été ajouté avec succès !`)
+				.setDescription(`Le rôle \`${role.name}\` vous à été ajouté avec succès !`)
 				.setColor(colorC)
 			;
-			interaction.reply({ embeds: [role_react_embed] })
+			interaction.member.roles.add(role.id, 'Validation du Règlement')
+			interaction.reply({ embeds: [role_react_embed], ephemeral: true })
 		}
 	}
 })
+
+
+
+
+/*client.on('interactionCreate', async interaction => {
+	if(interaction.isButton) {
+		const customid = interaction.customId;
+		if(customid.startsWith('bad_words_alert_')) {
+			if (customid.startsWith('bad_words_alert_no')) {
+				if(interaction.guild.ownerId === interaction.member.id) {
+					const auth_db = require('./dbs/authorizations.json')
+					if (auth_db.bad_voc.includes(interaction.guild.id)) {
+						auth_db.bad_voc.splice(auth_db.bad_voc.indexOf(interaction.guild.id), 1);
+						fs.writeFileSync('./dbs/authorizations.json', JSON.stringify(auth_db));
+
+						const embed = new MessageEmbed()
+							.setTitle(`Le système à été correctement désactivé !`)
+							.setColor('GREEN')
+						
+						interaction.reply({ embeds: [embed], ephemeral: true })
+						interaction.message.delete().catch(() => {});
+					} else {
+						const embed = new MessageEmbed()
+							.setTitle(`Le système à été correctement désactivé !`)
+							.setColor('GREEN')
+						;
+						interaction.reply({ embeds: [embed], ephemeral: true })
+						interaction.message.delete().catch(() => {});
+						return;
+					}
+					
+				} else {
+					return;
+				}
+			} else if (customid.startsWith('bad_words_alert_yes')) {
+				if(interaction.guild.ownerId === interaction.member.id) {
+					if (auth_db.bad_voc.includes(interaction.guild.id)) {
+						const auth_db = require('./dbs/authorizations.json')
+						auth_db.bad_voc.push(interaction.guild.id);
+						fs.writeFileSync('./dbs/authorizations.json', JSON.stringify(auth_db));
+
+						const embed = new MessageEmbed()
+							.setTitle(`Le système à été correctement activé !`)
+							.setColor('GREEN')
+						;
+						interaction.reply({ embeds: [embed], ephemeral: true })
+						interaction.message.delete().catch(() => {});
+					} else {
+						const embed = new MessageEmbed()
+							.setTitle(`Le système à été correctement activé !`)
+							.setColor('GREEN')
+						;
+						interaction.reply({ embeds: [embed], ephemeral: true })
+						interaction.message.delete().catch(() => {});
+						return;
+					}
+					
+				} else {
+					return;
+				}
+			}
+		}
+	}
+})*/
+
 
 
 
