@@ -100,11 +100,12 @@ const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
 const CONFIGWELLCOME = require('./comms/Config-Welcome');
 const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
-const ADMINTICKET = require('./comms/Adminticket');
+const ADMINTICKET = require('./comms/Adminticket/1.Adminticket');
 const COLOREMBED = require('./comms/Config-embed')
 const BOT = require('./comms/bot');
 const ROLEREACT = require('./comms/Rolereact');
 const BADVOC = require('./comms/bad-voc');
+const ADDROLEBTN = require('./comms/AddRoleBtn')
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -122,7 +123,7 @@ client.on('ready', async () => {
 	let i = 0;
 
 	
-
+	const package = require('./package.json')
 	// Statut du Bot
 	const statuses = [
 		'ses engrenages...',
@@ -130,7 +131,7 @@ client.on('ready', async () => {
 		'-help',
 		'derrière toi',
 		'-support',
-		'la version V.1.0.5',
+		`la version V.${package.version}`,
 		'Karma Akabane#6802',
 	];
 	setInterval(() => {
@@ -247,8 +248,9 @@ client.on('messageCreate', async msg => {
 			}
 
 			if (CLEAR.check(args)) {
-				return CLEAR.action(msg, args,
-				);
+				/*return CLEAR.action(msg, args,
+				);*/
+				CLEAR.off(msg);
 			}
 
 			if (AVATAR.check(args)) {
@@ -305,6 +307,12 @@ client.on('messageCreate', async msg => {
 				return ROLEREACT.action(msg, args, client,
 				);
 			}
+
+			if (ADDROLEBTN.check(args)) {
+				return ADDROLEBTN.action(msg, args, client,
+				);
+			}
+
 			/*if (BADVOC.check(args)) {
 				return BADVOC.action(msg, args, client,
 				);
@@ -313,9 +321,9 @@ client.on('messageCreate', async msg => {
 			
 			
 		}
-		const voc_db = require('./dbs/bad-voc.json');
+		/*const voc_db = require('./dbs/bad-voc.json');
 			const messageLowCase = msg.content.toLowerCase();
-			const allowed_bad_voc = require('./dbs/authorization.json')
+			const allowed_bad_voc = require('./dbs/authorizations.json')
 			if(!allowed_bad_voc.bad_voc.includes(msg.author.id)) {
 				for(let i = 0; i < args.length; i++) {
 					if(voc_db.voc.includes(args[i].toLocaleLowerCase())) {
@@ -323,7 +331,7 @@ client.on('messageCreate', async msg => {
 						msg.channel.send(`${msg.author}, vous avez utilisé un mot interdit !`);
 					}
 				}
-			}
+			}*/
 	}
 	else if (args[0].startsWith('-')) {
 		args[0] = args[0].substring(1);
@@ -687,45 +695,3 @@ client.on('interactionCreate', async interaction => {
 })*/
 
 
-
-
-
-//giveaway système !
-
-/*const { GiveawaysManager } = require('discord-giveaways');
-
-const manager = new GiveawaysManager(client, {
-    storage: './dbs/giveaways.json',
-    default: {
-        botsCanWin: false,
-        embedColor: 'GREEN',
-        embedColorEnd: 'RED',
-        reaction: '🎁'
-    }
-});
-
-client.giveawaysManager = manager;
-
-
-client.on('interactionCreate', (interaction) => {
-
-    const ms = require('ms');
-
-    if (interaction.isCommand() && interaction.commandName === 'start') {
-        // /start 2d 1 Awesome prize!
-        // Will create a giveaway with a duration of two days, with one winner and the prize will be "Awesome prize!"
-
-        const duration = interaction.options.getNumber('durée') + interaction.options.getString('unitée');
-        const winnerCount = interaction.options/getNumber('winners');
-        const prize = interaction.options.getString('prize');
-
-        client.giveawaysManager.start(interaction.channel, {
-            duration: ms(duration),
-            winnerCount,
-            prize
-    }).then((gData) => {
-            console.log(gData); // {...} (messageId, end date and more)
-        });
-        // And the giveaway has started!
-    }
-});*/

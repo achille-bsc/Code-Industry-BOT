@@ -102,3 +102,9 @@ async function waiting(time = 5000) {
 		}, time);
 	});
 }
+
+
+module.exports.off = (msg) => {
+	msg.delete();
+	return embeds.question(msg, 'La commande à été désactivée !', 'La désactivation de cette commande est due à un bug, elle sera réactivée dans les prochaines versions !');
+}

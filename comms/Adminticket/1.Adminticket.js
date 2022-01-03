@@ -1,8 +1,8 @@
 const { Permissions, MessageEmbed, MessageCollector, MessageActionRow, MessageButton } = require('discord.js');
 const commandeFormat = 'adminticket';
 const ALIAS = ['config-ticket', 'ticket-config'];
-const COLOR = require('../dbs/color-embeds.json');
-const message_ticket = require('../dbs/ticket-message.json')
+const COLOR = require('../../dbs/color-embeds.json');
+const message_ticket = require('../../dbs/ticket-message.json')
 const fs = require('fs')
 
 module.exports.check = (args) => {
@@ -19,11 +19,7 @@ module.exports.action = async (msg, args) => {
         msg.delete();
 		// executer le code
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
-        const embeds = require('../functions-handler/embeds')
-		const nperm = new MessageEmbed()
-			.setTitle('Erreur !')
-			.setColor('RED')
-			.setDescription('Vous n\'avez pas la permission d\'utiliser cette commande !');
+        const embeds = require('../../functions-handler/embeds')
 		if (!msg.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return embeds.erreur(msg, 'Vous n\'avez pas la permission d\'utiliser cette commande !' )
 		const question = await embeds.question(msg, 'Veuillez choisir une option', `> \`message\` => Configure le message sur le quelle sera joint le boutton permettant d'ouvrire un ticket.
         > \`cancel\` => Annuler la commande`)
@@ -38,6 +34,25 @@ module.exports.action = async (msg, args) => {
                     question.delete();
                 }
                 if(message.content.toLocaleLowerCase() === 'message') {
+                    const next_step = require('./2')
+
+                    if(next_step.check(embeds, msg, args, message)) {
+                        next_step.action(embeds, msg, args, question, collector, message)
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     question.delete();
                     collector.stop();
                     await message.channel.bulkDelete(1);

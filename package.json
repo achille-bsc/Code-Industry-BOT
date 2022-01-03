@@ -1,6 +1,6 @@
 {
   "name": "bot-french-simulation-djs",
-  "version": "1.2.0",
+  "version": "1.2.5",
   "description": "Bot perso de French Simulation. Le nom du bot est French'Bot",
   "main": "index.js",
   "scripts": {
