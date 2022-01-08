@@ -24,42 +24,8 @@ module.exports.action = async (msg, args) => {
         msg.delete();
         const embed = new MessageEmbed()
             .setTitle(`Liste des mots interdits par l'auto-modération`)
-            .setDescription(`Les mots authorisés ou non sont séléctionnés et gérés par les administrateurs du bot.
-                "pute",
-                "putte",
-                "puttain",
-                "putain",
-                "puttin", 
-                "putin", 
-                "put1", 
-                "con ", 
-                "connard", 
-                " con", 
-                "cv", 
-                "ptdr", 
-                "xptdr", 
-                "hitler",
-                "fait chier", 
-                " emmerde",
-                "’emmerde", 
-                "emmerder", 
-                "bite", 
-                "baisable", 
-                "baise", 
-                "bander", 
-                "branle", 
-                "bordel",
-                "burnes", 
-                "chier", 
-                "conne", 
-                "couille", 
-                "cul", 
-                "emmerde", 
-                "encule", 
-                "faire une pipe", 
-                "fait une pipe", 
-                "fais une pipe", 
-                "nique"`)
+            .setDescription(`\`${bad_voc.voc.join('\` \`')}\``)
+            .addField('Ajouter un mot', 'Pour proposer l\'ajout d\'un mot à l\'équipe du staff vous pouvez rejoindre celui-ci et nous en faire part dans une suggestion.')
             .setColor(colorC)
             .setTimestamp()
             .setFooter(`Demandé par ${msg.author.tag}`, msg.author.displayAvatarURL());

@@ -22,13 +22,11 @@ module.exports.action = async (msg, args) => {
 		const embed_channel = new MessageEmbed()
 			.setColor(color)
 			.addFields(
-				{ name: `#${channel.name} (${channel.id})`, value: `Informations et statistiques de <#${channel.id}>`, inline: false },
+				{ name: `<#${channel.name}>`, value: `Informations et statistiques de <#${channel.id}> (<#${channel.id}>)`, inline: false },
 				{ name: 'Serveur', value: `${channel.guild.name} (${channel.id})`, inline: true },
 				{ name: 'Catégorie', value: `${channel.parent.name}`, inline: true },
-				{ name: 'Membres', value: `${channel.members.length()}`, inline: true },
 				{ name: 'Date de création', value: `${channel.createdTimestamp}`, iniline: true },
 			)
-			.setFooter(`Demandé par ${msg.author}`, `${msg.author.avatarURL}`)
         ;
 		msg.channel.send({ embeds: [embed_channel] });
 	}

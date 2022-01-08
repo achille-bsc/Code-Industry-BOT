@@ -49,6 +49,11 @@ module.exports.action = async (msg, args) => {
 							value: 'mod-help',
 						},
 						{
+							label: '🤖 Auto-Modération',
+							description: `Toutes les commandes de d'Auto-Modération`,
+							value: 'automod-help',
+						},
+						{
 							label: '💬 Conversation - Commandes de Conversations',
 							description: 'Toutes les commandes de Conversations',
 							value: 'conv-help',

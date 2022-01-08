@@ -42,7 +42,7 @@ const bot = process.env.BOT;
 const test = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(test);
+client.login(bot);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -82,6 +82,7 @@ const ROLEREACT = require('./comms/Rolereact');
 const BADVOC = require('./comms/bad-voc');
 const ADDROLEBTN = require('./comms/AddRoleBtn')
 const BADVOCLISTE = require('./comms/bad-voc-liste');
+const CHANNELINFOS = require('./comms/channelinfo');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -113,7 +114,7 @@ client.on('ready', async () => {
 	setInterval(() => {
 		client.user.setActivity(statuses[i], { type: 'WATCHING', url: 'https://www.youtube.com/channel/UCoorq7xuhdcVe2hfRgu0_5g' });
 		i = ++i % statuses.length;
-	}, 7500);
+	}, 8571);
 	// TODO Règler le bug de ce système ou le désactiver pour la prochaine maj
 	/*setInterval(function() {
 		let serv = 0;
@@ -239,10 +240,10 @@ client.on('messageCreate', async msg => {
 				);
 			}
 
-			/* if (CHANNELINFOS.check(args)) {
+			if (CHANNELINFOS.check(args)) {
 				return CHANNELINFOS.action(msg, args, client,
 				);
-			}*/
+			}
 
 			if (METEO.check(args)) {
 				return METEO.action(msg, args, client,
@@ -353,6 +354,11 @@ client.on('interactionCreate', async interaction => {
 								label: '🔨 Modération',
 								description: 'Toutes les commandes de Modération',
 								value: 'mod-help',
+							},
+							{
+								label: '🤖 Auto-Modération',
+								description: `Toutes les commandes de d'Auto-Modération`,
+								value: 'automod-help',
 							},
 							{
 								label: '⚙️ Configurations',
@@ -481,7 +487,21 @@ client.on('interactionCreate', async interaction => {
 					.setDescription(`Il n'y a actuellement aucune commande premium.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
-			;
+				;
+
+				await interaction.deferUpdate();
+				await interaction.editReply({ embeds: [help_embed_2], components:[row] });
+			}
+			if (interaction.values[0] == 'automod-help') {
+
+				const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
+				const help_embed_2 = new MessageEmbed()
+					.setTitle(`🤖 Auto-Modération - Commandes d'Auto-Modération`)
+					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}bad-voc :** Permet d'activer ou désactiver l'auto-modération des mots interdits sur le serveur.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}bad-words :** Permet d'avoir la liste de tout les mots interdits sur le serveur.`)
+					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
+					.setColor(colorC)
+				;
 
 				await interaction.deferUpdate();
 				await interaction.editReply({ embeds: [help_embed_2], components:[row] });
