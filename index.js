@@ -3,7 +3,7 @@
 // -----Paramétrage API Discord.js
 
 
-
+const fs = require('fs')	
 
 const { SlashCommandBuilder,
 	SlashCommandBooleanOption,
@@ -29,31 +29,6 @@ const COLOR = require('./dbs/color-embeds.json');
 
 
 // slash commands manager (discord.js)
-/*const giveaway = new SlashCommandBuilder()
-	.setName('giveaway')
-	.setDescription('Créer un giveaway')
-	.addNumberOption(option => option 
-		.setName('durée')
-		.setDescription('Durée du giveaway')
-		.setRequired(true)
-	)
-	.addStringOption(option => option
-		.setName('unitée')
-		.setDescription('Unité de temps du giveaway')
-		.setRequired(true)
-		.addChoices(['m', 'h', 'd'])
-	)
-	.addNumberOption(option => option
-		.setTitle('gagnant')
-		.setDescription('Nombre de gagnant')
-		.setRequired(true)
-	)
-	.addStringOption(option => option
-		.setName('prix')
-		.setDescription('Prix gagnant du giveaway')
-	)
-;*/
-
 
 
 
@@ -67,7 +42,7 @@ const bot = process.env.BOT;
 const test = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(bot);
+client.login(test);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -100,12 +75,13 @@ const MEMBERCOUNT = require('./comms/membercount');
 const CONFIGMETEO = require('./comms/Config-météo');
 const CONFIGWELLCOME = require('./comms/Config-Welcome');
 const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
-const ADMINTICKET = require('./comms/Adminticket/1.Adminticket');
+const ADMINTICKET = require('./comms/Adminticket');
 const COLOREMBED = require('./comms/Config-embed')
 const BOT = require('./comms/bot');
 const ROLEREACT = require('./comms/Rolereact');
 const BADVOC = require('./comms/bad-voc');
 const ADDROLEBTN = require('./comms/AddRoleBtn')
+const BADVOCLISTE = require('./comms/bad-voc-liste');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -308,35 +284,49 @@ client.on('messageCreate', async msg => {
 				);
 			}
 
+			if (BADVOC.check(args)) {
+				return BADVOC.action(msg, args, client,
+				);
+			}
+
 			if (ADDROLEBTN.check(args)) {
 				return ADDROLEBTN.action(msg, args, client,
 				);
 			}
 
-			/*if (BADVOC.check(args)) {
-				return BADVOC.action(msg, args, client,
+			if (BADVOCLISTE.check(args)) {
+				return BADVOCLISTE.action(msg, args, client,
 				);
-			}*/
-
+			}
 			
-			
+				
 		}
-		/*const voc_db = require('./dbs/bad-voc.json');
-			const messageLowCase = msg.content.toLowerCase();
-			const allowed_bad_voc = require('./dbs/authorizations.json')
-			if(!allowed_bad_voc.bad_voc.includes(msg.author.id)) {
-				for(let i = 0; i < args.length; i++) {
-					if(voc_db.voc.includes(args[i].toLocaleLowerCase())) {
-						msg.delete().catch();
-						msg.channel.send(`${msg.author}, vous avez utilisé un mot interdit !`);
-					}
-				}
-			}*/
 	}
 	else if (args[0].startsWith('-')) {
 		args[0] = args[0].substring(1);
 	}
 });
+
+// Auto-Modération -- Messages Verification
+
+client.on('messageCreate', async msg => {
+	if(msg.guild.id != '854026188565774376') return;
+	if(msg.author.bot) return;
+	const args = msg.content.trim().toLocaleLowerCase().split(' ');
+	const voc_db = require('./dbs/bad-voc.json');
+	const messageLowCase = msg.content.toLowerCase();
+	const allowed_bad_voc = require('./dbs/authorizations.json')
+	if(allowed_bad_voc.badvoc.includes(msg.guild.id)) {
+		for(let i = 0; i < args.length; i++) {
+			if(voc_db.voc.includes(args[i].toLowerCase())) {
+				msg.delete().catch();
+				const message_bw = await embeds.erreur(msg, `***__L'auto-Modération à détécté le mot__*** \`${args[i]}\` ***__ dans votre message__***. Il s'aggit d'un mot interdit. Faite attention à votre langage.\n\nVoici ton message afin que vous puissiez le corriger :\n\n\`\`\`${msg.content}\`\`\``, true);
+				message_bw.react('❌');
+			}
+		}
+	}
+})
+
 
 // ----- Commande HELP -----
 
@@ -355,19 +345,24 @@ client.on('interactionCreate', async interaction => {
 								value: 'acc-help',
 							},
 							{
+								label: '🔮 Premium',
+								description: 'Commande prémium',
+								value: 'premium-help',
+							},
+							{
 								label: '🔨 Modération',
 								description: 'Toutes les commandes de Modération',
 								value: 'mod-help',
 							},
 							{
-								label: '💬 Conversation - Commandes de Conversations',
-								description: 'Toutes les commandes de Conversations',
-								value: 'conv-help',
-							},
-							{
 								label: '⚙️ Configurations',
 								description: 'Toutes le commandes de configurations',
 								value: 'config-help',
+							},
+							{
+								label: '💬 Conversation - Commandes de Conversations',
+								description: 'Toutes les commandes de Conversations',
+								value: 'conv-help',
 							},
 							{
 								label: '💡 Informations',
@@ -432,7 +427,8 @@ client.on('interactionCreate', async interaction => {
 					.setDescription(`> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}color-embed :** Configure la couleur des principaux messages du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}prefix :** Configure le préfix du bot.
 > **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}adminticket :** Configure le système de tickets.
-> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}rolereact :** Permet la configuration du système de RôleRéaction.`)
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}rolereact :** Permet la configuration du système de RôleRéaction.
+> **${PREFIXFILE.prefix[interaction.guild.id]?.prefix || '-'}add-role-btn :** Permet d'ajouter un rôleréaction à n'importe quelle message du bot. Cela peut être utile pour faire plusieurs rôlereact sur un seul message.`)
 					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
 					.setColor(colorC)
 			;
@@ -477,12 +473,23 @@ client.on('interactionCreate', async interaction => {
 				await interaction.deferUpdate();
 				await interaction.editReply({ embeds: [help_embed_2], components:[row] });
 			}
+			if (interaction.values[0] == 'premium-help') {
+
+				const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
+				const help_embed_2 = new MessageEmbed()
+					.setTitle('🔮 Premium - Commandes Premium')
+					.setDescription(`Il n'y a actuellement aucune commande premium.`)
+					.setFooter('Choisissez une catégorie dans le sélecteur ci-dessous pour en consulter les commandes.')
+					.setColor(colorC)
+			;
+
+				await interaction.deferUpdate();
+				await interaction.editReply({ embeds: [help_embed_2], components:[row] });
+			}
 		}
 	}
 });
 
-
-// Say Hello !
 
 client.on('guildMemberAdd', async (member) => {
 	const wlc_db = require('./dbs/wellcome.json');
@@ -522,13 +529,8 @@ client.on('guildMemberRemove', async (member) => {
 	}
 });
 
-// Logging
-/*
-client.on('debug', (...args) => {
-	console.log(`[DEBUG] ${args}`);
-});
 
-*/
+
 client.on('interactionCreate', async interaction => {
 	const embeds = require('./functions-handler/embeds')
 	if (!interaction.isButton()) return;
@@ -545,6 +547,9 @@ client.on('interactionCreate', async interaction => {
 			permissionOverwrites: [{
 				id: interaction.guild.id,
 				deny: ['VIEW_CHANNEL'],
+			}, {
+				id: interaction.member.id,
+				allow: ['VIEW_CHANNEL'],
 			}],
 			parent: catégorie
 		});
@@ -633,15 +638,15 @@ client.on('interactionCreate', async interaction => {
 
 
 
-/*client.on('interactionCreate', async interaction => {
+client.on('interactionCreate', async interaction => {
 	if(interaction.isButton) {
 		const customid = interaction.customId;
 		if(customid.startsWith('bad_words_alert_')) {
 			if (customid.startsWith('bad_words_alert_no')) {
-				if(interaction.guild.ownerId === interaction.member.id) {
+				if(interaction.guild.ownerId === interaction.member.id || interaction.member.id === '688098375697956905') {
 					const auth_db = require('./dbs/authorizations.json')
-					if (auth_db.bad_voc.includes(interaction.guild.id)) {
-						auth_db.bad_voc.splice(auth_db.bad_voc.indexOf(interaction.guild.id), 1);
+					if (auth_db.badvoc.includes(interaction.guild.id)) {
+						auth_db.badvoc.splice(auth_db.bad_voc.indexOf(interaction.guild.id), 1);
 						fs.writeFileSync('./dbs/authorizations.json', JSON.stringify(auth_db));
 
 						const embed = new MessageEmbed()
@@ -661,13 +666,15 @@ client.on('interactionCreate', async interaction => {
 					}
 					
 				} else {
+					interaction.reply({ content: `Seul le propriétaire du serveur peut activer ce système !` })
 					return;
 				}
 			} else if (customid.startsWith('bad_words_alert_yes')) {
-				if(interaction.guild.ownerId === interaction.member.id) {
-					if (auth_db.bad_voc.includes(interaction.guild.id)) {
-						const auth_db = require('./dbs/authorizations.json')
-						auth_db.bad_voc.push(interaction.guild.id);
+				if(interaction.guild.ownerId === interaction.member.id || interaction.member.id === '688098375697956905') {
+					const auth_db = require('./dbs/authorizations.json')
+					if (auth_db.badvoc.includes(interaction.guild.id)) {
+						
+						auth_db.badvoc.push(interaction.guild.id);	
 						fs.writeFileSync('./dbs/authorizations.json', JSON.stringify(auth_db));
 
 						const embed = new MessageEmbed()
@@ -677,21 +684,23 @@ client.on('interactionCreate', async interaction => {
 						interaction.reply({ embeds: [embed], ephemeral: true })
 						interaction.message.delete().catch(() => {});
 					} else {
+						auth_db.badvoc.push(interaction.guild.id);
+						
+						fs.writeFileSync('./dbs/authorizations.json', JSON.stringify(auth_db));
+
 						const embed = new MessageEmbed()
 							.setTitle(`Le système à été correctement activé !`)
 							.setColor('GREEN')
 						;
 						interaction.reply({ embeds: [embed], ephemeral: true })
 						interaction.message.delete().catch(() => {});
-						return;
 					}
 					
 				} else {
+					interaction.reply({ content: `Seul le propriétaire du serveur peut activer ce système !` })
 					return;
 				}
 			}
 		}
 	}
-})*/
-
-
+})

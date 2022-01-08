@@ -23,23 +23,25 @@ module.exports.action = async (msg, args) => {
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 
         const embed = new MessageEmbed()
-            .setTitle(`Voullez-vous L'auto-modération concernant les mots interdit ?`)
+            .setTitle('Voullez-vous authoriser les mots interdits ?')
             .setDescription('Les mots authorisés ou non sont séléctionnés et gérés par les administrateurs du bot.')
             .addField('Liste des mots', 'La liste des mots n\'est pour le moment pas terminée et donc pas communiquée.')
+            .addField('Authoriser', 'Les mots interdits sont authorisés.')
+            .addField('Interdire', 'Les mots interdits sont interdits.')
             .setColor(colorC)
         ;
 
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
-                    .setCustomId('bad_words_alert_yes')
-                    .setLabel('Activer')
+                    .setCustomId('bad_words_alert_no')
+                    .setLabel('Autoriser')
                     .setStyle('SUCCESS'),
             )
             .addComponents(
                 new MessageButton()
-                    .setCustomId('bad_words_alert_no')
-                    .setLabel('Désactiver')
+                    .setCustomId('bad_words_alert_yes')
+                    .setLabel('Interdire')
                     .setStyle('DANGER'),
             )
         ;
