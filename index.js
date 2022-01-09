@@ -42,7 +42,7 @@ const bot = process.env.BOT;
 const test = process.env.TEST;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(bot);
+client.login(test);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -86,10 +86,39 @@ const CHANNELINFOS = require('./comms/channelinfo');
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
-client.discordTogether;
+const start_webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/929558891765833788/IkPqLfHisDa_OYqvV3iI1nL-g4jDrvXTLtnIgO2TQrc7fiEbNsk42C9lNrNNPsSiYnl6' });
 
 const embeds = require('./functions-handler/embeds');
 client.on('ready', async () => {
+
+	// WebHook messag at bot starting
+
+	/*
+	Timesstamps durées
+
+	une heure => 3600 secs
+	une journée => 86400 secs
+	une semaine => 604800 secs
+	*/
+
+	const embed = new MessageEmbed()
+	.setTitle('Démarage - Code Industry')
+	.setColor('#4ed5f8')
+	.setDescription(`Le bot <@902293972091801620>, viens de démarer avec succès !
+
+	> L'heure et la date du démarage est: <t:${Math.floor(Date.now()/1000)}>
+
+	> Le développeur assur une durée de <t:${Math.floor(Date.now()/1000) + 604800}:R> ou plus avant la prochaine grosse mise à jour.
+
+	> Le développeur estime une durée entre <t:${Math.floor(Date.now()/1000) + 86400}:R> et <t:${Math.floor(Date.now()/1000) + 86400*3}:R> avant le prochaine mise à jour apportant la corrections de légers bugs`)
+	;
+
+	start_webhook.send({
+		username: 'Start - Code Industry',
+		avatarURL: 'https://i.imgur.com/7ZiAS1F.png',
+		embeds: [embed],
+	});
+
 	//client.guilds.cache.get()
 		console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
 		console.log(''),
@@ -195,7 +224,7 @@ client.on('messageCreate', async msg => {
 			}
 
 			if (PING.check(args)) {
-				return PING.action(msg, args,
+				return PING.action(msg, args, client
 				);
 			}
 
