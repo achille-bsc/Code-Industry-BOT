@@ -60,7 +60,7 @@ module.exports.action = async (msg, args) => {
 							const number4 = number2 - 0.5;
 							msgg.channel.bulkDelete(number3, true).catch();
 							await waiting(1000);
-							msgg.channel.bulkDelete(number4, true).catch();
+							await msgg.channel.bulkDelete(number4, true).catch();
 							const rep = await embeds.success(msg, `\`${number-2} messages ont étés supprimés avec succès !\``)
 							setTimeout(() => {
 								rep.delete();

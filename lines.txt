@@ -1,0 +1,98 @@
+index.js = 759
+=759
+
+AddRoleBtn.js = 146
+=905
+
+Adminticket.js = 273
+=1178
+
+Avatar.js = 161
+=1339
+
+Bad-Voc-Liste.js = 40
+=1379
+
+Bad-Voc = 53
+=1429
+
+Ban.js = 40
+=1469
+
+Bot.js = 38
+=1507
+
+ChannelInfos.js = 36
+=1546
+
+Clear.js = 110
+=1656
+
+Config-Embed.js = 111
+=1657
+
+Config-GoodBye.js = 149
+=1808
+
+Config-Météo = 90
+=1898
+
+Config-Préfix.js = 108
+=2006
+
+Config-Welcome.js = 150
+=2156
+
+Help.js = 85
+=2241
+
+Host.js = 30
+=2271
+
+Invite.js = 29
+=2300
+
+Joke.js = 98
+=2398
+
+Kick.js = 45
+=1243
+
+Lock.js = 43
+=2486
+
+membercount.js = 27
+=2513
+
+Météo.js = 75
+=2587
+
+Ping.js = 49
+=2636
+
+poll.js = 54
+=2690
+
+RoleReaxt.js = 124
+=2815
+
+Say.js = 43
+=2858
+
+Staff.js = 99
+=2857
+
+Suggestion_Bot.js = 77
+=2934
+
+support.js = 28
+=2962
+
+Unlock.js = 48
+=3010
+
+Embeds.js = 32
+=3042
+
+Messages.js = 10
+=3052

@@ -25,7 +25,7 @@ module.exports.action = async (msg, args) => {
             .setDescription('Voici les informations du bot :')
             .setColor(COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8')
             .addField('Nom du bot', '```' + msg.client.user.username + '```', true)
-            .addField('Créateur', '```' + msg.client.user.tag + '```', true)
+            .addField('Créateur', '```' + 'Light Yagami#8554' + '```', true)
             .addField('ID du bot', '```' + msg.client.user.id + '```', true)
             .addField('Version du bot', '```' + require('../package.json').version + '```', true)
             .addField('De nouvelle statistiques vont arriver sur le bot', 'Elles mettes juste un peut de temps car elles sont en cours de développement.')

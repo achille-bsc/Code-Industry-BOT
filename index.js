@@ -41,8 +41,10 @@ require('dotenv').config();
 const bot = process.env.BOT;
 const test = process.env.TEST;
 
+const token = test
+
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
-client.login(test);
+client.login(token);
 
 // -----Import DBs Configs-----
 const PREFIXFILE = require('./dbs/prefix.json');
@@ -83,6 +85,7 @@ const BADVOC = require('./comms/bad-voc');
 const ADDROLEBTN = require('./comms/AddRoleBtn')
 const BADVOCLISTE = require('./comms/bad-voc-liste');
 const CHANNELINFOS = require('./comms/channelinfo');
+const CLEARCHANNEL = require('./comms/clearchannel.js')
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -106,18 +109,21 @@ client.on('ready', async () => {
 	.setColor('#4ed5f8')
 	.setDescription(`Le bot <@902293972091801620>, viens de démarer avec succès !
 
-	> L'heure et la date du démarage est: <t:${Math.floor(Date.now()/1000)}>
+> L'heure et la date du démarage est: <t:${Math.floor(Date.now()/1000)}>
 
-	> Le développeur assur une durée de <t:${Math.floor(Date.now()/1000) + 604800}:R> ou plus avant la prochaine grosse mise à jour.
+> Le développeur assur une durée de <t:${Math.floor(Date.now()/1000) + 604800}:R> ou plus avant la prochaine grosse mise à jour.
 
-	> Le développeur estime une durée entre <t:${Math.floor(Date.now()/1000) + 86400}:R> et <t:${Math.floor(Date.now()/1000) + 86400*3}:R> avant le prochaine mise à jour apportant la corrections de légers bugs`)
+> Le développeur estime une durée entre <t:${Math.floor(Date.now()/1000) + 86400}:R> et <t:${Math.floor(Date.now()/1000) + 86400*3}:R> avant le prochaine mise à jour apportant la corrections de légers bugs`)
 	;
-
-	start_webhook.send({
-		username: 'Start - Code Industry',
-		avatarURL: 'https://i.imgur.com/7ZiAS1F.png',
-		embeds: [embed],
-	});
+	if(token === bot) {
+		start_webhook.send({
+			content: '<&@854029220346855435>',
+			username: 'Start - Code Industry',
+			avatarURL: 'https://i.imgur.com/7ZiAS1F.png',
+			embeds: [embed],
+		});
+	}
+	
 
 	//client.guilds.cache.get()
 		console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
@@ -254,9 +260,9 @@ client.on('messageCreate', async msg => {
 			}
 
 			if (CLEAR.check(args)) {
-				/*return CLEAR.action(msg, args,
-				);*/
-				CLEAR.off(msg);
+				return CLEAR.action(msg, args,
+				);
+				//CLEAR.off(msg);
 			}
 
 			if (AVATAR.check(args)) {
@@ -328,6 +334,11 @@ client.on('messageCreate', async msg => {
 				return BADVOCLISTE.action(msg, args, client,
 				);
 			}
+
+			if (CLEARCHANNEL.check(args)) {
+				return CLEARCHANNEL.action(msg, args, client,
+				);
+			}
 			
 				
 		}
@@ -337,10 +348,10 @@ client.on('messageCreate', async msg => {
 	}
 });
 
-// Auto-Modération -- Messages Verification
+// Auto-Modération
 
 client.on('messageCreate', async msg => {
-	if(msg.guild.id != '854026188565774376') return;
+	// Auto-Modération -- Message Vérification
 	if(msg.author.bot) return;
 	const args = msg.content.trim().toLocaleLowerCase().split(' ');
 	const voc_db = require('./dbs/bad-voc.json');
@@ -355,6 +366,9 @@ client.on('messageCreate', async msg => {
 			}
 		}
 	}
+
+	// Auto-Modération -- Anti-Spam Vérification
+	/*EN COURS DE RÉFLÉXION*/
 })
 
 
@@ -617,12 +631,12 @@ client.on('interactionCreate', async interaction => {
 				new MessageButton()
 					.setCustomId('close')
 					.setLabel('Fermer le Ticket')
-					.setStyle('DANGER'),
+					.setStyle('DANGER')
 			)
 		;
 
 
-		channel.send({ embeds: [open_ticket], components: [row] })
+		channel.send({ content: `<@${interaction.member.user.id}>`, embeds: [open_ticket], components: [row] })
 	}
 	if(interaction.customId === 'close') {
 		const colorC = COLOR['color-embed'][interaction.guild.id]?.color || '#4ed5f8';
@@ -719,7 +733,7 @@ client.on('interactionCreate', async interaction => {
 					return;
 				}
 			} else if (customid.startsWith('bad_words_alert_yes')) {
-				if(interaction.guild.ownerId === interaction.member.id || interaction.member.id === '688098375697956905') {
+				if(msg.member.permissions.has(Permissions.FLAGS.KICK_MEMBERS) || interaction.member.id === '688098375697956905') {
 					const auth_db = require('./dbs/authorizations.json')
 					if (auth_db.badvoc.includes(interaction.guild.id)) {
 						

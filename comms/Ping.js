@@ -24,7 +24,7 @@ module.exports.action = async (msg, args, client) => {
 			.setThumbnail('https://dbdzm869oupei.cloudfront.net/img/sticker/preview/10870.png')
 		;
 		const message = await msg.channel.send({ embeds: [ping_embed] });
-		await wait(1000)
+		await wait(2000)
 		const seconde_ping_embed = new MessageEmbed()
 			.setColor(colorC)
 			.setTitle('🏓 - Ping')

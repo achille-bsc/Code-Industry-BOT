@@ -1,6 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const commandeFormat = 'channelinfos';
-const ALIAS = ['channel-infos', 'channel-info', 'channelinfo', 'channinfos', 'channinfo'];
+const ALIAS = ['channel-infos', 'channel-info', 'channelinfo', 'channinfos', 'channinfo', 'ci'];
 const COLOR = require('../color-embeds.json');
 
 module.exports.check = (args) => {
@@ -11,7 +11,7 @@ module.exports.check = (args) => {
  *
  * @param {Discord.Message} msg
  */
-module.exports.action = async (msg, args) => {
+module.exports.action = async (msg, args, client) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 
 
@@ -20,12 +20,14 @@ module.exports.action = async (msg, args) => {
 		msg.delete();
 		const channel = msg.channel;
 		const embed_channel = new MessageEmbed()
+			.setTitle(channel.name + `${channel.id}`)
+			.setDescription(`Informations de ${channel.name}`)
 			.setColor(color)
 			.addFields(
-				{ name: `<#${channel.name}>`, value: `Informations et statistiques de <#${channel.id}> (<#${channel.id}>)`, inline: false },
-				{ name: 'Serveur', value: `${channel.guild.name} (${channel.id})`, inline: true },
-				{ name: 'Catégorie', value: `${channel.parent.name}`, inline: true },
-				{ name: 'Date de création', value: `${channel.createdTimestamp}`, iniline: true },
+				{ name: `Serveur`, value: `${channel.guild.name} (${channel.guild.id})`, inline: false },
+				{ name: 'Catégorie', value: `${channel.parent.name} (${channel.parent.id})`, inline: true },
+//				{ name: 'Permissions Code Industry', value: `${client.member.roles.highest.position}`, inline: true },
+				{ name: 'Date de création', value: `<t:${channel.createdTimestamp}> (<t:${Math.floor(channel.createdTimestamp/1000)}:R>)`, iniline: true },
 			)
         ;
 		msg.channel.send({ embeds: [embed_channel] });
