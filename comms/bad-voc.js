@@ -20,6 +20,7 @@ module.exports.check = (args) => {
 module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
 		// executer le code
+        if(msg.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR) || interaction.member.id === '688098375697956905') return emebds.erreur(msg, 'Vous devez avoire les permissions administrateur pour gérer ce système !')
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 
         const embed = new MessageEmbed()
