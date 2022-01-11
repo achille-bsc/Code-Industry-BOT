@@ -43,7 +43,7 @@ module.exports.action = async (msg, args) => {
 						.setFooter(`Avatar de ${member_collected.user.username} demandé par ${msg.author.username}`, member_collected.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 						.addFields (
 							{ name: 'Nom d\'utilisateur', value: `${member_collected.user.username}${member_collected.user.tag}`, inline: false },
-							{ name: 'Date de création du compte', value: `${member_collected.user.createdAt}`, inline: true },
+							{ name: 'Date de création du compte', value: `<t:${member_collected.user.createdTimestamp}>`, inline: true },
 							{ name: 'ID', value: `${member_collected.user.id}` },
 							{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Bravery`' },
 							{ name: 'Autres Badges', value: `${member_collected.user.flags.toArray()}` });
@@ -58,7 +58,7 @@ module.exports.action = async (msg, args) => {
 						.setFooter(`Avatar de ${member_collected.user.username} demandé par ${msg.author.username}`, member_collected.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 						.addFields (
 							{ name: 'Nom d\'utilisateur', value: `${member_collected.user.username}${member_collected.user.tag}`, inline: false },
-							{ name: 'Date de création du compte', value: `${member_collected.user.createdAt}`, inline: true },
+							{ name: 'Date de création du compte', value: `<t:${member_collected.user.createdTimestamp}>  `, inline: true },							
 							{ name: 'ID', value: `${member_collected.user.id}` },
 							{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Brilliance`' },
 							{ name: 'Autres Badges', value: `${member_collected.user.flags.toArray()}` });
@@ -74,7 +74,7 @@ module.exports.action = async (msg, args) => {
 						.setFooter(`Avatar de ${member_collected.user.username} demandé par ${msg.author.username}`, member_collected.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 						.addFields (
 							{ name: 'Nom d\'utilisateur', value: `${member_collected.user.username}${member_collected.user.tag}`, inline: false },
-							{ name: 'Date de création du compte', value: `${member_collected.user.createdAt}`, inline: true },
+							{ name: 'Date de création du compte', value: `<t:${member_collected.user.createdTimestamp}>  `, inline: true },
 							{ name: 'ID', value: `${member_collected.user.id}` },
 							{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Balance`' },
 							{ name: 'Autres Badges', value: `${member_collected.user.flags.toArray()}` });
@@ -90,7 +90,7 @@ module.exports.action = async (msg, args) => {
 						.setFooter(`Avatar de ${member_collected.user.username} demandé par ${msg.author.username}`, member_collected.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 						.addFields (
 							{ name: 'Nom d\'utilisateur', value: `${member_collected.user.username}${member_collected.user.tag}`, inline: false },
-							{ name: 'Date de création du compte', value: `${member_collected.user.createdAt}`, inline: true },
+							{ name: 'Date de création du compte', value: `<t:${member_collected.user.createdTimestamp}>  `, inline: true },
 							{ name: 'ID', value: `${member_collected.user.id}` });
 					msg.channel.send({ embeds: [avatar] });
 				}
@@ -105,7 +105,7 @@ module.exports.action = async (msg, args) => {
 				.setFooter(`Avatar de ${member_.user.username} demandé par ${msg.author.username}`, member_.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 				.addFields (
 					{ name: 'Nom d\'utilisateur', value: `${member_.user.username}${member_.user.tag}`, inline: false },
-					{ name: 'Date de création du compte', value: `${member_.user.createdAt}`, inline: true },
+					{ name: 'Date de création du compte', value: `<t:${member_.user.createdTimestamp}>  `, inline: true },
 					{ name: 'ID', value: `${member_.user.id}` },
 					{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Bravery`' },
 					{ name: 'Autres Badges', value: `${member_.user.flags.toArray()}` });
@@ -120,7 +120,7 @@ module.exports.action = async (msg, args) => {
 				.setFooter(`Avatar de ${member_.user.username} demandé par ${msg.author.username}`, member_.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 				.addFields (
 					{ name: 'Nom d\'utilisateur', value: `${member_.user.username}${member_.user.tag}`, inline: false },
-					{ name: 'Date de création du compte', value: `${member_.user.createdAt}`, inline: true },
+					{ name: 'Date de création du compte', value: `<t:${member_.user.createdTimestamp}>  `, inline: true },
 					{ name: 'ID', value: `${member_.user.id}` },
 					{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Brilliance`' },
 					{ name: 'Autres Badges', value: `${member_.user.flags.toArray()}` });
@@ -135,7 +135,7 @@ module.exports.action = async (msg, args) => {
 				.setFooter(`Avatar de ${member_.user.username} demandé par ${msg.author.username}`, member_.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 				.addFields (
 					{ name: 'Nom d\'utilisateur', value: `${member_.user.username}${member_.user.tag}`, inline: false },
-					{ name: 'Date de création du compte', value: `${member_.user.createdAt}`, inline: true },
+					{ name: 'Date de création du compte', value: `<t:${member_.user.createdTimestamp}>  `, inline: true },
 					{ name: 'ID', value: `${member_.user.id}` },
 					{ name: 'HypeSquad :', value: 'Vous faites parti de la `House Balance`' },
 					{ name: 'Autres Badges', value: `${member_.user.flags.toArray()}` });
@@ -150,7 +150,7 @@ module.exports.action = async (msg, args) => {
 				.setFooter(`Avatar de ${member_.user.username} demandé par ${msg.author.username}`, member_.user.displayAvatarURL({ format: 'png', size: 32, dynamic: true }))
 				.addFields (
 					{ name: 'Nom d\'utilisateur', value: `${member_.user.username}${member_.user.tag}`, inline: false },
-					{ name: 'Date de création du compte', value: `${member_.user.createdAt}`, inline: true },
+					{ name: 'Date de création du compte', value: `<t:${member_.user.createdTimestamp}>  `, inline: true },
 					{ name: 'ID', value: `${member_.user.id}` });
 			msg.channel.send({ embeds: [avatar] });
 		}
