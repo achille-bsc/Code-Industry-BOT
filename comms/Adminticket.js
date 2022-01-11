@@ -25,18 +25,18 @@ module.exports.action = async (msg, args) => {
 			.setColor('RED')
 			.setDescription('Vous n\'avez pas la permission d\'utiliser cette commande !');
 		if (!msg.member.permissions.has(Permissions.FLAGS.ADMINISTRATOR)) return embeds.erreur(msg, 'Vous n\'avez pas la permission d\'utiliser cette commande !' )
-        const question = await embeds.question(msg, 'Veuillez choisir une option', `> \`message\` => Configure le message sur le quelle sera joint le boutton permettant d'ouvrire un ticket.
+        const question = await embeds.question(msg, 'Veuillez choisir une option', `> \`create\` => Configure le message sur le quelle sera joint le boutton permettant d'ouvrire un ticket.
         > \`cancel\` => Annuler la commande`)
         const collector = new MessageCollector(msg.channel, m => m.author.id === msg.author.id, { time: 60000 });
 		collector.on('collect', async message => {
             if( message.author.bot ) return
-            if(message.content === 'message' || message.content === 'cancel') {
+            if(message.content === 'create' || message.content === 'cancel') {
                 if(message.content.toLocaleLowerCase() === 'cancel') {
                     embeds.cancel(msg);
                     collector.stop();
                     question.delete();
                 }
-                if(message.content.toLocaleLowerCase() === 'message') {
+                if(message.content.toLocaleLowerCase() === 'create') {
                     question.delete();
                     collector.stop();
                     await message.channel.bulkDelete(1);
