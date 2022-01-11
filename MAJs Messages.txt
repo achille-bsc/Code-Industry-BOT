@@ -5,6 +5,7 @@ Il y un temps off de 1 ou 2 minutes maximum.
 
 > **✨ - Nouveautés:**
 - Ajout des prévisions sur les prochaines mises à jours à venir lors du démarage du bot dans le salon <#929558847159406622>
+- Ajout de la commande `getmydata` qui permet à l'utilisateur de récupérer certaines informations auxquelles le bot à accès 
 
 
 

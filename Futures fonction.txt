@@ -1,5 +1,4 @@
-- Ajouter un système de connection pour recevoir les data de l'utilisateur en question.
 - Système de interserveur
 - Système de commandes Fun
-- Système de commandes de Jeux discord
+- Système de commandes de Jeux discord // EN COURS DE DEV
 - System de Enable & Disable discord

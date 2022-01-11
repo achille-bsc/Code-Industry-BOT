@@ -86,6 +86,7 @@ const ADDROLEBTN = require('./comms/AddRoleBtn')
 const BADVOCLISTE = require('./comms/bad-voc-liste');
 const CHANNELINFOS = require('./comms/channelinfo');
 const CLEARCHANNEL = require('./comms/clearchannel.js')
+const GETMYDATA = require('./comms/getmydata')
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -339,6 +340,11 @@ client.on('messageCreate', async msg => {
 				return CLEARCHANNEL.action(msg, args, client,
 				);
 			}
+
+			/*if (GETMYDATA.check(args)) {
+				return GETMYDATA.action(msg, args, client,
+				);
+			}*/
 			
 				
 		}
