@@ -3,6 +3,10 @@
 // -----Paramétrage API Discord.js
 
 
+// MONGOOSE
+
+
+
 const fs = require('fs')	
 
 const { SlashCommandBuilder,
@@ -93,7 +97,24 @@ const GETMYDATA = require('./comms/getmydata')
 const start_webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/929558891765833788/IkPqLfHisDa_OYqvV3iI1nL-g4jDrvXTLtnIgO2TQrc7fiEbNsk42C9lNrNNPsSiYnl6' });
 
 const embeds = require('./functions-handler/embeds');
+const mongoose = require('mongoose');
 client.on('ready', async () => {
+
+	// start connection with the DB
+
+	try {
+
+		await mongoose.connect(process.env.DB, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true
+		})
+
+		console.log('Connected to the DB');
+	} catch(e) {
+		console.log('DB non connectée ! Voir l\'erreur ci-dessous\n\n', e)
+		return process.exit();
+	}
+
 
 	// WebHook messag at bot starting
 
@@ -773,3 +794,11 @@ client.on('interactionCreate', async interaction => {
 		}
 	}
 })
+
+const GUILDCREATE = require('./guildcreate/config.js');
+
+/*client.on('guildCreate', async guild => {
+		return GUILDCREATE.action(
+			guild, client,
+		);
+})*/
