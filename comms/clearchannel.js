@@ -1,4 +1,4 @@
-const { MessageEmbed, Permissions, MessageButton, MessageActionRow, InteractionCollector, Channel, ChannelManager } = require('discord.js');
+/*const { MessageEmbed, Permissions, MessageButton, MessageActionRow, InteractionCollector, Channel, ChannelManager } = require('discord.js');
 const { error } = require('../functions-handler/embeds');
 const commandeFormat = 'clearchannel';
 const COLOR = require('../dbs/color-embeds.json');
@@ -16,7 +16,7 @@ module.exports.check = (args) => {
  *
  * @param {Discord.Message} msg
  */
-module.exports.action = async (msg, args) => {
+/*module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		// executer le code
@@ -53,3 +53,4 @@ module.exports.action = async (msg, args) => {
 		msg.reply('Mauvaise commande, voila ce que j\'attend **' + commandeFormat + '**');
 	}
 };
+*/

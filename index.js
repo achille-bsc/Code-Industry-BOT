@@ -795,7 +795,7 @@ client.on('interactionCreate', async interaction => {
 	}
 })
 
-const GUILDCREATE = require('./guildcreate/config.js');
+//const GUILDCREATE = require('./guildcreate/config.js');
 
 /*client.on('guildCreate', async guild => {
 		return GUILDCREATE.action(

@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+/*const { Schema, model } = require('mongoose');
 
 const guildSchema = new Schema({
     id: String,
@@ -10,4 +10,4 @@ const guildSchema = new Schema({
 
 module.exports = {
     Guild: model('Guild', guildSchema)
-}
+}*/
