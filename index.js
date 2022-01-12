@@ -139,7 +139,7 @@ client.on('ready', async () => {
 	;
 	if(token === bot) {
 		start_webhook.send({
-			content: '<&@854029220346855435>',
+			content: '<@&854029220346855435>',
 			username: 'Start - Code Industry',
 			avatarURL: 'https://i.imgur.com/7ZiAS1F.png',
 			embeds: [embed],
