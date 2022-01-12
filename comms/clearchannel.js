@@ -20,7 +20,7 @@ module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		// executer le code
-		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS || !msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return embeds.erreur(msg, 'Vous n\'avez pas la permission d\'utiliser cette commande.');
+		if (!msg.member.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS) || !msg.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return  embeds.erreur(msg, 'Vous n\'avez pas la permission d\'utiliser cette commande.');
         
 		const row = new MessageActionRow()
 			.addComponents(

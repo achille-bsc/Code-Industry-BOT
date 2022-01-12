@@ -20,17 +20,17 @@ module.exports.action = async (msg, args) => {
 	if (commandeFormat.split(' ').length <= args.length) {
         const colorC = COLOR['color-embed'][msg.guild.id]?.color || '#4ed5f8';
 		// executer le code
+        msg.delete();
 		const embed = new MessageEmbed()
             .setColor(colorC)
             .setTitle('Vos informations')
-            .setDescription(`*mention + tag*: <@${msg.author.member.id}>${msg.author.tag}
-            *identifiant*: ${msg.author.id}
-            *pseudo*: ${msg.author.username}
-            *discriminateur*: ${msg.author.discriminator}
-            *statut*: ${msg.author.presence.status}
-            *date de création du compte*: ${msg.author.createdAt}`)
+            .setDescription(`**mention + tag**: <@${msg.author.id}>${msg.author.tag}
+            **identifiant**: ${msg.author.id}
+            **pseudo**: ${msg.author.username}
+            **discriminateur**: ${msg.author.discriminator}
+            **date de création du compte**: ${msg.author.createdAt}`)
         ;
-        msg.channel.send({ embeds: [embed] });
+        msg.author.send({ embeds: [embed] });
 		
 	}
 	else {

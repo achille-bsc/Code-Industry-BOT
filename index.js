@@ -45,7 +45,7 @@ require('dotenv').config();
 const bot = process.env.BOT;
 const test = process.env.TEST;
 
-const token = test
+const token = bot
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
 client.login(token);
@@ -357,15 +357,15 @@ client.on('messageCreate', async msg => {
 				);
 			}
 
-			if (CLEARCHANNEL.check(args)) {
+			/*if (CLEARCHANNEL.check(args)) {
 				return CLEARCHANNEL.action(msg, args, client,
 				);
-			}
+			}*/
 
-			/*if (GETMYDATA.check(args)) {
+			if (GETMYDATA.check(args)) {
 				return GETMYDATA.action(msg, args, client,
 				);
-			}*/
+			}
 			
 				
 		}
