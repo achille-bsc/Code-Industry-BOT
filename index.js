@@ -97,12 +97,12 @@ const GETMYDATA = require('./comms/getmydata')
 const start_webhook = new WebhookClient({ url: 'https://discord.com/api/webhooks/929558891765833788/IkPqLfHisDa_OYqvV3iI1nL-g4jDrvXTLtnIgO2TQrc7fiEbNsk42C9lNrNNPsSiYnl6' });
 
 const embeds = require('./functions-handler/embeds');
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 client.on('ready', async () => {
 
 	// start connection with the DB
 
-	try {
+	/*try {
 
 		await mongoose.connect(process.env.DB, {
 			useNewUrlParser: true,
@@ -113,7 +113,7 @@ client.on('ready', async () => {
 	} catch(e) {
 		console.log('DB non connectée ! Voir l\'erreur ci-dessous\n\n', e)
 		return process.exit();
-	}
+	}*/
 
 
 	// WebHook messag at bot starting
@@ -640,6 +640,9 @@ client.on('interactionCreate', async interaction => {
 			}, {
 				id: interaction.member.id,
 				allow: ['VIEW_CHANNEL'],
+			}, {
+				id: '902293972091801620',
+				allow: ['ADMINISTRATOR']
 			}],
 			parent: catégorie
 		});
