@@ -1,4 +1,0 @@
-- Système de interserveur
-- Système de commandes Fun
-- Système de commandes de Jeux discord // EN COURS DE DEV
-- System de Enable & Disable discord

@@ -1,0 +1,6 @@
+- Système de interserveur // à faire surle logn therme
+- Système de commandes Fun
+- Système de commandes de Jeux discord // EN COURS DE DEV
+- Systeme de Enable & Disable  // à faire sur le long therme
+- System de premium ( 1€ / mois )
+- Systeme de commande personnalisé ( Prémium )

@@ -1,0 +1,4 @@
+à faire avant le passage sur serveur !
+
+- Mettre l'if du vrai bot ici ( ../index.js Ticket système at permissionOverwriting of the Ticket)
+- Changer la variable chargée de login le bot pour la mettre sur "bot" au lieu de "test"

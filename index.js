@@ -45,7 +45,7 @@ require('dotenv').config();
 const bot = process.env.BOT;
 const test = process.env.TEST;
 
-const token = bot
+const token = test
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
 client.login(token);
@@ -54,43 +54,52 @@ client.login(token);
 const PREFIXFILE = require('./dbs/prefix.json');
 
 
-// -----Imports WebHooks-----
+// ----- Imports WebHooks -----
 
 
-// -----Imports Fichers de Commandes-----
+// ----- Imports Fichiers Admin-commandes -----
+const MEMBERCOUNT = require('./Admin_comms/membercount');
+const SETADMIN = require('./Admin_comms/set_admin');
+
+// -----Imports Fichers de Commandes -----
 // const CONFIG = require('./comms/config.js')
-const HELP = require('./comms/Help');
-const HOST = require('./comms/Host');
-const INVITE = require('./comms/Invite');
-const JOKE = require('./comms/Jokes');
-const KICK = require('./comms/kick');
-const LOCK = require('./comms/Lock');
-const POLL = require('./comms/Poll');
-const PING = require('./comms/Ping');
-const PREFIX = require('./comms/Config-prefix');
-const SAY = require('./comms/Say');
-const SUPPORT = require('./comms/support');
-const SUGGEST = require('./comms/suggest_bot');
-const UNLOCK = require('./comms/Unlock');
-const CLEAR = require('./comms/Clear');
-const AVATAR = require('./comms/avatar');
-const BAN = require('./comms/ban.js');
-const METEO = require('./comms/meteo');
-const STAFF = require('./comms/staff');
-const MEMBERCOUNT = require('./comms/membercount');
-const CONFIGMETEO = require('./comms/Config-météo');
-const CONFIGWELLCOME = require('./comms/Config-Welcome');
-const CONFIGGOODBYE = require('./comms/Config-Goodbye.js');
-const ADMINTICKET = require('./comms/Adminticket');
-const COLOREMBED = require('./comms/Config-embed')
-const BOT = require('./comms/bot');
-const ROLEREACT = require('./comms/Rolereact');
-const BADVOC = require('./comms/bad-voc');
-const ADDROLEBTN = require('./comms/AddRoleBtn')
-const BADVOCLISTE = require('./comms/bad-voc-liste');
-const CHANNELINFOS = require('./comms/channelinfo');
-const CLEARCHANNEL = require('./comms/clearchannel.js')
-const GETMYDATA = require('./comms/getmydata')
+//ADMINISTRATOR
+const BAN = require('./comms/ADMINISTRATOR/ban.js');
+const CLEAR = require('./comms/ADMINISTRATOR/Clear');
+const CLEARCHANNEL = require('./comms/ADMINISTRATOR/clearchannel.js');
+const KICK = require('./comms/ADMINISTRATOR/kick');
+const LOCK = require('./comms/ADMINISTRATOR/Lock');
+const STAFF = require('./comms/ADMINISTRATOR/staff');
+const UNLOCK = require('./comms/ADMINISTRATOR/Unlock');
+//CONFIGURATIONS
+const ADDROLEBTN = require('./comms/CONFIGURATIONS/AddRoleBtn')
+const ADMINTICKET = require('./comms/CONFIGURATIONS/Adminticket');
+const BADVOC = require('./comms/CONFIGURATIONS/bad-voc');
+const COLOREMBED = require('./comms/CONFIGURATIONS/Config-embed')
+const CONFIGGOODBYE = require('./comms/CONFIGURATIONS/Config-Goodbye.js');
+const CONFIGMETEO = require('./comms/CONFIGURATIONS/Config-météo');
+const CONFIGWELLCOME = require('./comms/CONFIGURATIONS/Config-Welcome');
+const PREFIX = require('./comms/CONFIGURATIONS/Config-Goodbye');
+//INFORMATIONS
+const AVATAR = require('./comms/INFORMATIONS/avatar');
+const BADVOCLISTE = require('./comms/INFORMATIONS/bad-voc-liste');
+const CHANNELINFOS = require('./comms/INFORMATIONS/channelinfo');
+const GETMYDATA = require('./comms/INFORMATIONS/getmydata');
+const HOST = require('./comms/INFORMATIONS/Host');
+const INVITE = require('./comms/INFORMATIONS/Invite');
+// UTILE
+const BOT = require('./comms/UTILE/bot');
+const HELP = require('./comms/UTILE/Help');
+const JOKE = require('./comms/UTILE/Jokes');
+const METEO = require('./comms/UTILE/meteo');
+const PING = require('./comms/UTILE/Ping');
+const ROLEREACT = require('./comms/UTILE/Rolereact');
+const SAY = require('./comms/UTILE/Say');
+const SUGGEST = require('./comms/UTILE/suggest_bot');
+const SUPPORT = require('./comms/UTILE/support');
+const POLL = require('./comms/UTILE/Poll');
+
+
 
 // const CONFIGMETEO = require('./comms/Config-météo');
 
@@ -125,6 +134,21 @@ client.on('ready', async () => {
 	une journée => 86400 secs
 	une semaine => 604800 secs
 	*/
+
+
+
+	// synchronisation membercount et servercount
+	setInterval(() => {
+		const servers = client.channels.cache.get('902209703352881152');
+		let serv = 0
+		client.guilds.cache.map( guildss => {
+			serv = serv + 1
+		})
+
+
+		servers.edit({ name: `${serv}-serveurs` })
+	}, 1000);
+
 
 	const embed = new MessageEmbed()
 	.setTitle('Démarage - Code Industry')
@@ -312,11 +336,6 @@ client.on('messageCreate', async msg => {
 				);
 			}
 
-			if (MEMBERCOUNT.check(args)) {
-				return MEMBERCOUNT.action(msg, args, client,
-				);
-			}
-
 			if (CONFIGMETEO.check(args)) {
 				return CONFIGMETEO.action(msg, args, client,
 				);
@@ -366,6 +385,24 @@ client.on('messageCreate', async msg => {
 				return GETMYDATA.action(msg, args, client,
 				);
 			}
+
+
+			// ----- Commandes ADMINISTRATEURS -----
+			const admin_db = require('./dbs/admins.json')
+			if (admin_db.admins.includes(msg.author.id)) {
+				if (MEMBERCOUNT.check(args, msg)) {
+					return MEMBERCOUNT.action(msg, args, client,
+					)
+				};
+
+				if (SETADMIN.check(args, msg)) {
+					return SETADMIN.action(msg, args, client,
+					)
+				};
+			}
+
+			
+
 			
 				
 		}
@@ -641,7 +678,7 @@ client.on('interactionCreate', async interaction => {
 				id: interaction.member.id,
 				allow: ['VIEW_CHANNEL'],
 			}, {
-				id: '902293972091801620',
+				id: '902177238978539543',
 				allow: ['ADMINISTRATOR']
 			}],
 			parent: catégorie

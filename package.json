@@ -41,5 +41,8 @@
   "bugs": {
     "url": "https://github.com/frenchsimu/Code-Industry-BOT/issues"
   },
-  "homepage": "https://github.com/frenchsimu/Code-Industry-BOT#readme"
+  "homepage": "https://github.com/frenchsimu/Code-Industry-BOT#readme",
+  "devDependencies": {
+    "electron": "^16.0.7"
+  }
 }
