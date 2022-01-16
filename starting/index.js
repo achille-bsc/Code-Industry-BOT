@@ -148,7 +148,7 @@ client.on("ready", async () => {
 
     servers.edit({ name: `${serv} Serveurs` });
     users.edit({ name: `${members} Utilisateurs` });
-  }, 1000);
+  }, 5000);
 
   //client.guilds.cache.get()
   console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
