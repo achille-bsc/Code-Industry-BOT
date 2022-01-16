@@ -4,7 +4,7 @@
   "description": "Bot perso de French Simulation. Le nom du bot est French'Bot",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node starting/index.js",
     "dev": "nodemon --exec 'npm start'",
     "lint": "eslint --ext .js --ignore-path .gitignore .",
     "lint:fix": "eslint --ext .js --ignore-path .gitignore . --fix"
@@ -43,6 +43,7 @@
   },
   "homepage": "https://github.com/frenchsimu/Code-Industry-BOT#readme",
   "devDependencies": {
-    "electron": "^16.0.7"
+    "electron": "^16.0.7",
+    "prettier": "2.5.1"
   }
 }
