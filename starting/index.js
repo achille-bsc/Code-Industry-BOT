@@ -49,7 +49,7 @@ require("dotenv").config();
 const bot = process.env.BOT;
 const test = process.env.TEST;
 
-const token = test;
+const token = bot;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
 client.login(token);
@@ -137,8 +137,8 @@ client.on("ready", async () => {
 
   // synchronisation membercount et servercount
   setInterval(() => {
-    const servers = client.channels.cache.get("848598227736461332");
-    const users = client.channels.cache.get("904714460562870333");
+    const servers = client.channels.cache.get("905521931732807701");
+    const users = client.channels.cache.get("930933939818856488");
     let serv = 0;
     let members = 0;
     client.guilds.cache.map((guildss) => {
@@ -146,8 +146,8 @@ client.on("ready", async () => {
       members = members + guildss.memberCount;
     });
 
-    servers.edit({ name: `${serv}-serveurs` });
-    users.edit({ name: `${members}-utilisateurs` });
+    servers.edit({ name: `${serv} Serveurs` });
+    users.edit({ name: `${members} Utilisateurs` });
   }, 1000);
 
   //client.guilds.cache.get()
