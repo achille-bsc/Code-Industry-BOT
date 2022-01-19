@@ -18,7 +18,11 @@ const {
   SlashCommandSubcommandBuilder,
   SlashCommandSubcommandGroupBuilder,
   SlashCommandUserOption,
+  ContextMenuCommandBuilder,
+  ContextMenuCommandAssertions
 } = require("@discordjs/builders");
+
+
 
 const {
   MessageEmbed,
@@ -39,6 +43,10 @@ const client = new Client({
 });
 const COLOR = require("../dbs/color-embeds.json");
 
+module.exports = {
+  client
+}
+
 // slash commands manager (discord.js)
 
 const webhookClient = new WebhookClient({
@@ -49,7 +57,7 @@ require("dotenv").config();
 const bot = process.env.BOT;
 const test = process.env.TEST;
 
-const token = bot;
+const token = test;
 
 // TODO Changer le TOKEN du bot avant la mise en ligne de la maj.
 client.login(token);
@@ -62,6 +70,7 @@ const PREFIXFILE = require("../dbs/prefix.json");
 // ----- Imports Fichiers Admin-commandes -----
 const MEMBERCOUNT = require("../Admin_comms/membercount");
 const SETADMIN = require("../Admin_comms/set_admin");
+const OFF = require("../Admin_comms/off");
 
 // -----Imports Fichers de Commandes -----
 // const CONFIG = require('../comms/config.js')
@@ -95,6 +104,7 @@ const HELP = require("../comms/UTILE/Help");
 const JOKE = require("../comms/UTILE/Jokes");
 const METEO = require("../comms/UTILE/meteo");
 const PING = require("../comms/UTILE/Ping");
+const QUOTE = require('../comms/UTILE/quote')
 const ROLEREACT = require("../comms/UTILE/Rolereact");
 const SAY = require("../comms/UTILE/Say");
 const SUGGEST = require("../comms/UTILE/suggest_bot");
@@ -136,27 +146,23 @@ client.on("ready", async () => {
 	*/
 
   // synchronisation membercount et servercount
-  setInterval(() => {
-    const servers = client.channels.cache.get("905521931732807701");
-    const users = client.channels.cache.get("930933939818856488");
-    let serv = 0;
-    let members = 0;
-    client.guilds.cache.map((guildss) => {
-      serv = serv + 1;
-      members = members + guildss.memberCount;
-    });
+  if (client.id === "902293972091801620") {
+    setInterval(() => {
+      const servers = client.channels.cache.get("905521931732807701");
+      const users = client.channels.cache.get("930933939818856488");
+      let serv = 0;
+      let members = 0;
+      client.guilds.cache.map((guildss) => {
+        serv = serv + 1;
+        members = members + guildss.memberCount;
+      });
 
-    servers.edit({ name: `${serv} Serveurs` });
-    users.edit({ name: `${members} Utilisateurs` });
-  }, 5000);
+      servers.edit({ name: `${serv} Serveurs` });
+      users.edit({ name: `${members} Utilisateurs` });
+    }, 5000);
+  }
 
   //client.guilds.cache.get()
-  console.log(`Le code à bien été link sur le bot ${client.user.tag} :`);
-  console.log(""),
-    console.log("	 - Bot Oppérationnel"),
-    console.log(""),
-    console.log(""),
-    console.log("");
   let i = 0;
 
   const package = require("../package.json");
@@ -340,6 +346,10 @@ client.on("messageCreate", async (msg) => {
         return BADVOCLISTE.action(msg, args, client);
       }
 
+      /*if (QUOTE.check(args)) {
+        return QUOTE.action(msg, args, client);
+      }*/
+
       /*if (CLEARCHANNEL.check(args)) {
 				return CLEARCHANNEL.action(msg, args, client,
 				);
@@ -358,6 +368,10 @@ client.on("messageCreate", async (msg) => {
 
         if (SETADMIN.check(args, msg)) {
           return SETADMIN.action(msg, args, client);
+        }
+
+        if (OFF.check(args, msg)) {
+          return OFF.action(msg, args, client);
         }
       }
     }
